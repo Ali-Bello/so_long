@@ -6,7 +6,7 @@ CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3
 
 MLXFLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
 
-SRCS = srcs/main.c srcs/parsing.c srcs/map.c srcs/moves.c
+SRCS = srcs/main.c srcs/parsing.c srcs/map.c srcs/moves.c srcs/scaling.c
 
 LIBFTPATH = includes/libft
 

@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 01:27:41 by aderraj           #+#    #+#             */
-/*   Updated: 2024/05/05 22:26:31 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/05/13 16:39:05 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,13 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
+
+typedef struct s_list
+{
+	void			*content;
+	struct s_list	*next;
+}	t_list;
+
 
 void	ft_putstr_fd(char *s, int fd);
 
@@ -30,4 +37,9 @@ char	**ft_split(char const *s, char c);
 
 size_t	ft_strlen(const char *s);
 
+t_list	*ft_lstlast(t_list *lst);
+void	ft_lstadd_back(t_list **lst, t_list *new);
+t_list	*ft_lstnew(void *content);
+int		ft_lstsize(t_list *lst);
+void	ft_lstiter(t_list *lst, void *mlx, void (*f)(void *, void *));
 #endif

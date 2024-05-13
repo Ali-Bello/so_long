@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 19:18:01 by aderraj           #+#    #+#             */
-/*   Updated: 2024/05/08 10:41:19 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/05/08 15:47:29 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ void	draw_map(char **map, t_img *imgs, t_mlx *mlx)
 			if (map[i][j] == 'E')
 				mlx_put_image_to_window(mlx->mlx, mlx->window, imgs[4].img_ptr, x, y);
 			j++;
-			x += imgs[0].width * imgs[0].scale;
+			x += imgs[0].width;
 		}
-		y += imgs[0].height * imgs[0].scale;
+		y += imgs[0].height;
 		i++;
 	}
 }
