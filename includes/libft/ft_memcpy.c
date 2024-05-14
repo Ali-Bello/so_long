@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 13:57:19 by aderraj           #+#    #+#             */
-/*   Updated: 2024/05/13 14:00:45 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/05/14 20:04:00 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ t_list	*ft_lstnew(void *content)
 	ptr->next = 0;
 	return (ptr);
 }
+
 int	ft_lstsize(t_list *lst)
 {
 	int	i;

@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 01:27:41 by aderraj           #+#    #+#             */
-/*   Updated: 2024/05/13 16:39:05 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/05/14 17:01:16 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,5 @@ t_list	*ft_lstlast(t_list *lst);
 void	ft_lstadd_back(t_list **lst, t_list *new);
 t_list	*ft_lstnew(void *content);
 int		ft_lstsize(t_list *lst);
-void	ft_lstiter(t_list *lst, void *mlx, void (*f)(void *, void *));
+void	ft_lstiter(t_list *lst, void (*f)(void *));
 #endif
