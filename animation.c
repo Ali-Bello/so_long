@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 00:51:20 by aderraj           #+#    #+#             */
-/*   Updated: 2024/05/14 22:14:05 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/05/16 00:33:00 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,32 @@
 #define A	    0
 #define S	    1
 #define D	    2
-#define IMG_WIDTH 65
-#define IMG_HEIGHT 65
+#define IMG_WIDTH 160
+#define IMG_HEIGHT 128
+
+typedef struct s_frame
+{
+	t_img	*img;
+	struct s_frame	*next;
+} t_frame;
 
 typedef struct s_animation
 {
-	t_list	*frames;
-	int		x;
-	int		y;
-	int		w;
-	int		h;
+	t_frame				*frames;
+	int					n_frames;
+	int					x;
+	int					y;
+	int					w;
+	int					h;
+	struct s_animation	*next;
 } t_animation;
 
 typedef struct s_sprite
 {
-	t_img	*img;
-	t_list	*animations;
-	void	*mlx;
-	void	*win;
+	t_img		*img;
+	t_animation	*animations;
+	void		*mlx;
+	void		*win;
 }	t_sprite;
 
 t_sprite	*new_sprite(char *filename, void *mlx, void *window)
@@ -90,8 +98,6 @@ void	cpy_img(t_img *src, t_img *dst, int x, int y)
 	}
 }
 
-	// printf("sprite_img = [%p]\nimg_data = [%p]\nwidth = [%d]\nheight = [%d]\n", src->img_ptr, src->img_data, src->width, src->height);
-	// printf("frame = [%p]\nimg_data = [%p]\nwidth = [%d]\nheight = [%d]\n", dst->img_ptr, dst->img_data, dst->width, dst->height);
 t_img	*new_frame(t_sprite	*sprite, int x, int y)
 {
 	t_img	*img;
@@ -106,78 +112,110 @@ t_img	*new_frame(t_sprite	*sprite, int x, int y)
 	img->width = IMG_WIDTH;
 	img->height = IMG_HEIGHT;
 	cpy_img(sprite->img, img, x, y);
+	// mlx_put_image_to_window(sprite->mlx, sprite->win, img->img_ptr, 150, 150);
 	return (img);
-}
-
-int is_frame_transparent(t_img *src, int x, int y)
-{
-    // Ensure the image has an alpha channel (bpp should be 32 or more)
-    printf("src->bpp = [%d]\n", src->bpp);
-	// if (src->bpp < 32) {
-    //     return 0;  // No alpha channel, assume non-transparent
-    // }
-
-    int bytes_per_pixel = src->bpp / 8;
-    int alpha_offset = bytes_per_pixel - 1;  // Alpha is the last byte in each pixel (RGBA)
-
-    for (int i = 0; i < IMG_WIDTH; i++) {
-        for (int j = 0; j < IMG_HEIGHT; j++) {
-            int src_index = ((y + i) * src->line_len) + ((x + j) * bytes_per_pixel);
-
-            // Check the alpha value
-            if (src->img_data[src_index + alpha_offset] != 0) {
-                return 0;  // Found a non-transparent pixel
-            }
-        }
-    }
-    return 1;
 }
 
 void	load_frames(t_animation *animation, t_sprite *sprite)
 {
-	while (animation->x < sprite->img->width && !is_frame_transparent(sprite->img, animation->x, animation->y))
+	t_frame	*tmp;
+	t_frame	*new;
+
+	if (!animation->frames)
 	{
-		ft_lstadd_back(&animation->frames, ft_lstnew(new_frame(sprite, animation->x, animation->y)));
+		animation->frames = malloc(sizeof(t_frame));
+		animation->frames->img = NULL;
+		animation->frames->next = NULL;
+	}
+	tmp = animation->frames;
+	while (animation->x < (IMG_WIDTH * 4))
+	{
+		tmp->img = new_frame(sprite, animation->x, animation->y);
+		new = malloc(sizeof(t_frame));
+		if (!new)
+			return;
+		new->next = NULL;
+		tmp->next = new;
+		tmp = tmp->next;
 		animation->x += IMG_WIDTH;
+	}
+	tmp = animation->frames;
+	printf("\n-------\n");
+	while (tmp)
+	{
+		printf("animation->frames = [%p]\n", tmp);
+		printf("frames->img->img_ptr = [%p]\n", tmp->img->img_ptr);
+		tmp = tmp->next;
 	}
 	animation->w = animation->x;
 	animation->h = IMG_HEIGHT;
 }
 
+t_animation	*new_animation()
+{
+	t_animation	*ptr;
+
+	ptr = malloc(sizeof(t_animation));
+	if (!ptr)
+		return (NULL);
+	ptr->frames = NULL;
+	ptr->next = NULL;
+	ptr->x = 0;
+	ptr->y = 0;
+	return (ptr);
+}
 void	load_animations(t_sprite *sprite, int n)
 {
 	int	i;
-	t_list	*tmp;
+	t_animation	*tmp;
 
 	i = 0;
-	while (i < n)
+	sprite->animations = new_animation();
+	tmp = sprite->animations;
+	while (i < n - 1)
 	{
-		ft_lstadd_back(&sprite->animations, ft_lstnew(malloc(sizeof(t_animation))));
+		tmp->next = new_animation();
+		tmp = tmp->next;
 		i++;
 	}
-	(*((t_animation *)(sprite->animations->content))) = (t_animation){NULL, 0, 0, 0, 0};
 	tmp = sprite->animations;
-	while (tmp && tmp->next)
+	while (tmp)
 	{
-		((t_animation *)(tmp->next->content))->x = 0;
-		((t_animation *)(tmp->next->content))->y = ((t_animation *)(tmp->content))->y + IMG_HEIGHT;
-		load_frames(tmp->content, sprite);
+		printf("!!! -> sprite->animations = [%p]\n", tmp);
+		if (tmp->next)
+			tmp->next->y = tmp->y + IMG_HEIGHT;
+		load_frames(tmp, sprite);
 		tmp = tmp->next;
 	}
+
 }
 
 void	draw_assets(t_mlx *mlx, t_sprite *sprite)
 {
-	t_list	*tmp;
-	t_list	*tmp2;
+	t_animation *tmp;
+	t_frame		*tmp2;
 
+	// tmp = sprite->animations;
+	// while (tmp)
+	// {
+	// 	printf("\n-------------\n");
+	// 	printf("sprite->animations = [%p]\n", sprite->animations);
+	// 	tmp2 = sprite->animations->frames;
+	// 	while (tmp2)
+	// 	{
+	// 		printf("frame->img_ptr = [%p]\ntmp2->img_data =[%p]\ntmp2->img_width = [%d]\ntmp2->img_height = [%d]\n", tmp2->img->img_ptr, tmp2->img->img_data, tmp2->img->width, tmp2->img->height);
+	// 		tmp2 = tmp2->next;
+	// 	}
+	// 	printf("\n-------------\n");
+	// 	tmp = tmp->next;
+	// }
 	tmp = sprite->animations;
 	while (tmp)
 	{
-		tmp2 = ((t_animation *)(tmp->content))->frames;
+		tmp2 = tmp->frames;
 		while (tmp2)
 		{
-			mlx_put_image_to_window(mlx->mlx, mlx->window, ((t_img *)(tmp2))->img_ptr, 150, 150);
+			mlx_put_image_to_window(mlx->mlx, mlx->window, tmp2->img->img_ptr, 150, 150);
 			tmp2 = tmp2->next;
 		}
 		tmp = tmp->next;
@@ -190,8 +228,12 @@ int main()
 	t_mlx		mlx;
 
 	mlx.mlx = mlx_init();
-	mlx.window = mlx_new_window(mlx.mlx, 1920, 1080, "ANIMATION TEST");
+	mlx.window = mlx_new_window(mlx.mlx, 900, 900, "ANIMATION TEST");
 	sprite = new_sprite("textures/Player.xpm", mlx.mlx, mlx.window);
+	printf("sprite [%p]\n", sprite);
+	printf("sprite->img_ptr = [%p]\nsprite->img_data =[%p]\nsprite->img_width = [%d]\nsprite->img_height = [%d]\n", sprite->img->img_ptr, sprite->img->img_data, sprite->img->width, sprite->img->height);
+	printf("sprite->img_bpp = [%d]\nsprite->img_line_len = [%d]\nsprite->img_endian = [%d]\n", sprite->img->bpp, sprite->img->line_len, sprite->img->endian);
+	printf("sprite->animations = [%p]\n", sprite->animations);
 	load_animations(sprite, 5);
 	draw_assets(&mlx, sprite);
 	mlx_loop(mlx.mlx);
