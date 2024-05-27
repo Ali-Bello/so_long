@@ -10,18 +10,18 @@ int	close_laysa()
 {
 	return (exit(0), 0);
 }
-void	load_assests(t_sprite *sprites, t_mlx *mlx)
+void	load_assests(t_sprite **sprites, t_mlx *mlx)
 {
-	sprites[0] = *new_sprite("../textures/Player.xpm", mlx->mlx, mlx->window);
-		load_animations(&sprites[0], 1);
-	sprites[1] = *new_sprite("../textures/Player.xpm", mlx->mlx, mlx->window);
-		load_animations(&sprites[1], 2);
-	sprites[2] = *new_sprite("../textures/Player.xpm", mlx->mlx, mlx->window);
-		load_animations(&sprites[2], 1);
-	sprites[3] = *new_sprite("../textures/Player.xpm", mlx->mlx, mlx->window);
-		load_animations(&sprites[3], 2);
-	sprites[4] = *new_sprite("../textures/Player.xpm", mlx->mlx, mlx->window);
-		load_animations(&sprites[4], 5);
+	sprites[0] = new_sprite("textures/Free_space.xpm", mlx->mlx, mlx->window);
+		load_animations(sprites[0], 1);
+	sprites[1] = new_sprite("textures/Walls.xpm", mlx->mlx, mlx->window);
+		load_animations(sprites[1], 2);
+	sprites[2] = new_sprite("textures/Collectibles.xpm", mlx->mlx, mlx->window);
+		load_animations(sprites[2], 1);
+	sprites[3] = new_sprite("textures/Exit.xpm", mlx->mlx, mlx->window);
+		load_animations(sprites[3], 2);
+	sprites[4] = new_sprite("textures/Player2.xpm", mlx->mlx, mlx->window);
+		load_animations(sprites[4], 24);
 }
 
 int	get_height(char **map)
@@ -33,25 +33,33 @@ int	get_height(char **map)
 		i++;
 	return (i);
 }
+#include <time.h>
 
-// int	apply_move(int keycode, t_data *data)
-// {
-// 	if (keycode == 2)
-// 		move_right(data->map, data->game);
-// 	else if (keycode == 0)
-// 		move_left(data->map, data->game);
-// 	else if (keycode == 13)
-// 		move_up(data->map, data->game);
-// 	else if (keycode == 1)
-// 		move_down(data->map, data->game);
-// 	draw_map(data->map, data->img, data->mlx);
-// 	return (0);
-// }
+int	apply_moves(int keycode, t_game *game)
+{
+	get_player_xy(game);
+	if (keycode == 2)
+		right_move(game);
+	else if (keycode == 1)
+		down_move(game);
+	else if (!keycode)
+		left_move(game);
+	else if (keycode == 13)
+		up_move(game);
+	if (!keycode || keycode == 1 || keycode == 2 || keycode == 13)
+	{
+		game->player->dx = ((game->player->target_x - game->player->x) * IMG_WIDTH) / 6.0;
+		game->player->dy = ((game->player->target_y - game->player->y) * IMG_HEIGHT) / 6.0;
+		game->player->moving = 1;
+	}
+	return (0);
+}
 
 int main()
 {
-	t_sprite	sprites[6];
+	t_sprite	*sprites[6];
 	t_mlx	mlx;
+	t_game	game;
 	char	**map;
 	int	fd;
 
@@ -64,13 +72,14 @@ int main()
 	mlx.height = IMG_HEIGHT * get_height(map);
 	if (mlx.width > 5000 || mlx.height > 3000)
 		return (printf("MAP IS TOO BIG\n"));
-	// if (mlx.width > SCREEN_WIDTH || mlx.height > SCREEN_HEIGHT)
-	// 	scale_assests(&mlx, imgs, ft_strlen(*map), get_height(map));
 	mlx.window = mlx_new_window(mlx.mlx, mlx.width ,mlx.height, "SO LONG");
 	load_assests(sprites, &mlx);
-	mlx_key_hook(mlx.window, close1, mlx.mlx);
+	t_player ptr = (t_player){sprites[4]->animations, sprites[4]->animations->frames, 0, 0, 0, 0, 0, 0, 0};
+	game = (t_game){sprites, &ptr, map, 17, 0, 0};
+	get_player_xy(&game);
+	mlx_key_hook(mlx.window, apply_moves, &game);
+	// mlx_key_hook(mlx.window, close1, mlx.mlx);
 	mlx_hook(mlx.window, 17, 0, close_laysa, 0);
-	// mlx_hook(mlx.window, 2, 0, apply_move, &data);
-	draw_map(map, sprites);
+	mlx_loop_hook(mlx.mlx, draw_map, &game);
 	mlx_loop(mlx.mlx);
 }

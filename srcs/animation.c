@@ -1,17 +1,5 @@
 #include "../headers/so_long.h"
 
-typedef struct s_animation_state {
-    t_animation *current_animation;
-	t_frame *current_frame;
-	int frame_index;
-	int frame_count;
-	int frame_delay; // Delay between frames in terms of loop iterations
-	int frame_delay_counter;
-	void	*mlx;
-	void	*win;
-} t_animation_state;
-
-
 t_sprite	*new_sprite(char *filename, void *mlx, void *win)
 {
 	t_sprite	*s;
@@ -23,6 +11,8 @@ t_sprite	*new_sprite(char *filename, void *mlx, void *win)
 	if (!s->img)
 		return (free(s), NULL);
 	s->img->img_ptr = mlx_xpm_file_to_image(mlx, filename, &s->img->width, &s->img->height);
+	if (!s->img->img_ptr)
+		return (free(s->img), free(s), NULL);
 	s->img->img_data = mlx_get_data_addr(s->img->img_ptr, &s->img->bpp, &s->img->line_len, &s->img->endian);
 	s->mlx = mlx;
 	s->win = win;
@@ -109,7 +99,7 @@ void	add_animation(t_animation **head, int y)
 	new->frames = NULL;
 	new->x = 0;
 	new->y = y;
-	new->frame_count = 7;
+	new->frame_count = 6;
 	new->frame_idx = 0;
 	new->frame_delay = 7;
 	new->delay_counter = 0;
@@ -172,6 +162,8 @@ void	load_animations(t_sprite *sprite, int n)
 	int			i;
 	t_animation	*tmp;
 
+	if (!sprite)
+		return;
 	i = 0;
 	sprite->animations = new_animations(n);
 	if (!sprite->animations)
@@ -179,12 +171,10 @@ void	load_animations(t_sprite *sprite, int n)
 	tmp = sprite->animations;
 	while (i < n)
 	{
-		load_frames(sprite, 17);
+		load_frames(sprite, 6);
 		sprite->animations = sprite->animations->next;
 		i++;
 	}
 	sprite->animations = tmp;
 }
-
-
 
