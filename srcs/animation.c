@@ -101,7 +101,7 @@ void	add_animation(t_animation **head, int y)
 	new->y = y;
 	new->frame_count = 6;
 	new->frame_idx = 0;
-	new->frame_delay = 7;
+	new->frame_delay = 10;
 	new->delay_counter = 0;
 	new->next = NULL;
 	if (!tmp)
@@ -136,6 +136,8 @@ void	load_frames(t_sprite *sprite, int n)
 
 	i = 0;
 	tmp = sprite->animations->frames;
+	if (sprite->img->width <= IMG_WIDTH || sprite->img->height <= IMG_HEIGHT)
+		n = 1;
 	while (i < n)
 	{
 		new = new_frame(sprite, sprite->animations->x, sprite->animations->y);

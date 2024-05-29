@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 00:40:20 by aderraj           #+#    #+#             */
-/*   Updated: 2024/05/27 01:41:46 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/05/28 23:28:02 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,19 +53,25 @@ void move_player(t_game *game, int new_x, int new_y)
     game->player->x = new_x;
     game->player->y = new_y;
     game->moves++;
-    game->player->moving = 1; // Start moving
+	//Start moving
 }
 
 void	right_move(t_game *game)
 {
-	if (game->map[game->player->y][game->player->x + 1] == '1')
-		return ;
-	else if (game->map[game->player->y][game->player->x + 1] == 'C')
+	int	flag;
+
+	flag = 0;
+	if (game->map[game->player->y][game->player->x + 1] != '1'
+			&& (game->map[game->player->y][game->player->x + 1] == 'C'
+			|| game->map[game->player->y][game->player->x + 1] == '0'))
 	{
 		game->map[game->player->y][game->player->x + 1] = 'P';
 		game->map[game->player->y][game->player->x] = '0';
-		game->collected++;
+		if (game->map[game->player->y][game->player->x + 1] == 'C')
+			game->collected++;
 		game->moves++;
+		flag = 1;
+
 	}
 	else if (game->map[game->player->y][game->player->x + 1] == 'E')
 	{
@@ -73,26 +79,31 @@ void	right_move(t_game *game)
 			exit(-1);
 		game->moves++;
 	}
-	else if (game->map[game->player->y][game->player->x + 1] == '0')
+	if (flag)
 	{
-		game->map[game->player->y][game->player->x + 1] = 'P';
-		game->map[game->player->y][game->player->x] = '0';
-		game->moves++;
+		game->player->target_x = game->player->x + 1;
+		game->player->target_y = game->player->y;
+		game->player_dir = 1;
 	}
-	game->player->target_x = game->player->x + 1;
-	game->player->target_y = game->player->y;
 }
 
 void	left_move(t_game *game)
 {
-	if (game->player->x > 0 && game->map[game->player->y][game->player->x - 1] == '1')
-		return ;
-	else if (game->player->x > 0 && game->map[game->player->y][game->player->x - 1] == 'C')
+	int	flag;
+
+	flag = 0;
+	if (game->player->x > 0 && game->map[game->player->y][game->player->x - 1] != '1'
+			&& (game->map[game->player->y][game->player->x - 1] == 'C'
+			|| game->map[game->player->y][game->player->x - 1] == '0'))
 	{
 		game->map[game->player->y][game->player->x - 1] = 'P';
 		game->map[game->player->y][game->player->x] = '0';
-		game->collected++;
+		if (game->map[game->player->y][game->player->x - 1] == 'C')
+			game->collected++;
 		game->moves++;
+		flag = 1;
+
+
 	}
 	else if (game->player->x > 0 && game->map[game->player->y][game->player->x - 1] == 'E')
 	{
@@ -100,26 +111,28 @@ void	left_move(t_game *game)
 			exit(-1);
 		game->moves++;
 	}
-	else if (game->player->x > 0 && game->map[game->player->y][game->player->x - 1] == '0')
+	if (flag)
 	{
-		game->map[game->player->y][game->player->x - 1] = 'P';
-		game->map[game->player->y][game->player->x] = '0';
-		game->moves++;
+		game->player->target_x = game->player->x - 1;
+		game->player->target_y = game->player->y;
 	}
-	game->player->target_x = game->player->x - 1;
-	game->player->target_y = game->player->y;
 }
 
 void	up_move(t_game  *game)
 {
-	if (game->player->y > 0 && game->map[game->player->y - 1][game->player->x] == '1')
-		return ;
-	else if (game->player->y > 0 && game->map[game->player->y - 1][game->player->x] == 'C')
+	int	flag;
+
+	flag = 0;
+	if (game->player->y > 0 && game->map[game->player->y - 1][game->player->x] != '1'
+		&& (game->map[game->player->y - 1][game->player->x] == 'C'
+		|| game->map[game->player->y - 1][game->player->x] == '0'))
 	{
 		game->map[game->player->y - 1][game->player->x] = 'P';
 		game->map[game->player->y][game->player->x] = '0';
-		game->collected++;
+		if (game->map[game->player->y - 1][game->player->x] == 'C')
+			game->collected++;
 		game->moves++;
+		flag = 1;
 	}
 	else if (game->player->y > 0 && game->map[game->player->y - 1][game->player->x] == 'E')
 	{
@@ -127,26 +140,28 @@ void	up_move(t_game  *game)
 			exit(-1);
 		game->moves++;
 	}
-	else if (game->player->y > 0 && game->map[game->player->y - 1][game->player->x] == '0')
+	if (flag)
 	{
-		game->map[game->player->y - 1][game->player->x] = 'P';
-		game->map[game->player->y][game->player->x] = '0';
-		game->moves++;
+		game->player->target_x = game->player->x;
+		game->player->target_y = game->player->y - 1;
 	}
-	game->player->target_x = game->player->x;
-	game->player->target_y = game->player->y - 1;
 }
 
 void	down_move(t_game *game)
 {
-	if (game->map[game->player->y + 1][game->player->x] == '1')
-		return ;
-	else if (game->map[game->player->y + 1][game->player->x] == 'C')
+	int	flag;
+
+	flag = 0;
+	if (game->map[game->player->y + 1][game->player->x] != '1'
+		&& (game->map[game->player->y + 1][game->player->x] == 'C'
+		|| game->map[game->player->y + 1][game->player->x] == '0'))
 	{
 		game->map[game->player->y + 1][game->player->x] = 'P';
 		game->map[game->player->y][game->player->x] = '0';
-		game->collected++;
+		if (game->map[game->player->y + 1][game->player->x] == 'C')
+			game->collected++;
 		game->moves++;
+		flag = 1;
 	}
 	else if (game->map[game->player->y + 1][game->player->x] == 'E')
 	{
@@ -154,12 +169,9 @@ void	down_move(t_game *game)
 			exit(-1);
 		game->moves++;
 	}
-	else if (game->map[game->player->y + 1][game->player->x] == '0')
+	if (flag)
 	{
-		game->map[game->player->y + 1][game->player->x] = 'P';
-		game->map[game->player->y][game->player->x] = '0';
-		game->moves++;
+		game->player->target_x = game->player->x;
+		game->player->target_y = game->player->y + 1;
 	}
-	game->player->target_x = game->player->x;
-	game->player->target_y = game->player->y + 1;
 }
