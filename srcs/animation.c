@@ -86,7 +86,7 @@ t_frame	*new_frame(t_sprite	*sprite, int x, int y)
 	return (frame);
 }
 
-void	add_animation(t_animation **head, int y)
+void	add_animation(t_animation **head, int y, void *mlx, void *win)
 {
 	t_animation	*tmp;
 	t_animation	*new;
@@ -97,6 +97,9 @@ void	add_animation(t_animation **head, int y)
 
 	new = malloc(sizeof(t_animation));
 	new->frames = NULL;
+	new->current_frame = NULL;
+	new->mlx = mlx;
+	new->win = win;
 	new->x = 0;
 	new->y = y;
 	new->frame_count = 6;
@@ -110,7 +113,7 @@ void	add_animation(t_animation **head, int y)
 		tmp->next = new;
 }
 
-t_animation	*new_animations(int n)
+t_animation	*new_animations(void *mlx, void *win, int n)
 {
 	t_animation	*a;
 	int			i;
@@ -121,7 +124,7 @@ t_animation	*new_animations(int n)
 	y = 0;
 	while (i < n)
 	{
-		add_animation(&a, y);
+		add_animation(&a, y, mlx, win);
 		y += IMG_HEIGHT;
 		i++;
 	}
@@ -167,7 +170,7 @@ void	load_animations(t_sprite *sprite, int n)
 	if (!sprite)
 		return;
 	i = 0;
-	sprite->animations = new_animations(n);
+	sprite->animations = new_animations(sprite->mlx, sprite->win, n);
 	if (!sprite->animations)
 		return ;
 	tmp = sprite->animations;

@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 23:42:47 by aderraj           #+#    #+#             */
-/*   Updated: 2024/05/27 00:01:07 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/05/29 23:13:08 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,9 @@ typedef struct s_frame
 typedef struct s_animation
 {
 	t_frame				*frames;
+	t_frame				*current_frame;
+	void				*mlx;
+	void				*win;
 	int					x;
 	int					y;
 	int					w;
@@ -65,11 +68,10 @@ typedef struct s_player
 	t_frame		*current_frame;
 	int		x;
 	int		y;
+	int		x_px;
+	int		y_px;
 	int		target_x;
 	int		target_y;
-	double		dx;
-	double		dy;
-	int		moving;
 } t_player;
 
 typedef struct s_sprite
@@ -94,21 +96,18 @@ typedef struct s_game
 	t_sprite	**assests;
 	t_player	*player;
 	char		**map;
-	int	collectibles;
-	int	collected;
-	int	moves;
+	void		*mlx;
+	void		*win;
+	int			collectibles;
+	int			collected;
+	int			moves;
+	int			player_dir;
 }	t_game;
 
-typedef struct s_data
-{
-	t_game	*game;
-	char	**map;
-	t_img	*img;
-	t_mlx	*mlx;
-} t_data;
-
-
-
+void		update_player_xy(t_game *game);
+void		move_player(t_game *game, int new_x, int new_y);
+int			render_map(t_game *game);
+void		render_player(t_game *game, int x, int y);
 char		**get_map(int fd);
 int			draw_map(t_game *game);
 void		scale_assests(t_mlx *mlx, t_img	*imgs, int map_width, int map_height);
@@ -116,9 +115,6 @@ t_sprite	*new_sprite(char *filename, void *mlx, void *win);
 void		load_animations(t_sprite *sprite, int n);
 int			draw_sprite(t_sprite *sprite, int x, int y);
 void		get_player_xy(t_game *game);
-void	right_move(t_game *game);
-void	left_move(t_game *game);
-void	up_move(t_game *game);
-void	down_move(t_game *game);
-void move_player(t_game *game, int new_x, int new_y);
+void 		move_player(t_game *game, int new_x, int new_y);
+void		draw_animation(t_animation *animation, int x, int y);
 #endif

@@ -36,25 +36,23 @@ int	get_height(char **map)
 
 int	apply_moves(int keycode, t_game *game)
 {
-	static int z;
-
-	if (!z)
-		z = 5;
 	if(keycode == 53)
 		exit(1);
 	else if (keycode == 2)
-		right_move(game);
+		move_player(game, game->player->x + 1, game->player->y);
 	else if (keycode == 1)
-		down_move(game);
+		move_player(game, game->player->x, game->player->y + 1);
 	else if (!keycode)
-		left_move(game);
+		move_player(game, game->player->x - 1, game->player->y);
 	else if (keycode == 13)
-		up_move(game);
-	// if (!keycode || keycode == 1 || keycode == 2 || keycode == 13)
-	// {
-
-	// }
+		move_player(game, game->player->x, game->player->y - 1);
 	return (0);
+}
+int	stop_moving(int keycode, t_game *game)
+{
+    if (keycode == 2 || keycode == 1 || keycode == 0 || keycode == 13)
+        game->player_dir = -1;
+    return (0);
 }
 
 int main()
@@ -76,11 +74,12 @@ int main()
 		return (printf("MAP IS TOO BIG\n"));
 	mlx.window = mlx_new_window(mlx.mlx, mlx.width ,mlx.height, "SO LONG");
 	load_assests(sprites, &mlx);
-	t_player ptr = (t_player){sprites[4]->animations, sprites[4]->animations->frames, 0, 0, 0, 0};
-	game = (t_game){sprites, NULL, &ptr, map, 17, 0, 0, 0};
+	t_player ptr = (t_player){sprites[4]->animations, NULL, 0, 0, 0, 0, 0, 0};
+	game = (t_game){sprites, &ptr, map, mlx.mlx, mlx.window, 17, 0, 0, -1};
 	get_player_xy(&game);
 	mlx_hook(mlx.window, 17, 0, close_laysa, 0);
 	mlx_hook(mlx.window, 2, 0, apply_moves, &game);
-	mlx_loop_hook(mlx.mlx, draw_map, &game);
+	mlx_hook(mlx.window, 3, 0, stop_moving, &game);
+	mlx_loop_hook(mlx.mlx, render_map, &game);
 	mlx_loop(mlx.mlx);
 }
