@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 23:42:47 by aderraj           #+#    #+#             */
-/*   Updated: 2024/05/29 23:13:08 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/05/31 00:45:45 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 
 #define SCREEN_WIDTH 1920
 #define SCREEN_HEIGHT 1080
-#define IMG_WIDTH 32
-#define IMG_HEIGHT 48
+#define IMG_WIDTH 64
+#define IMG_HEIGHT 64
 
 typedef struct s_img
 {
@@ -72,6 +72,7 @@ typedef struct s_player
 	int		y_px;
 	int		target_x;
 	int		target_y;
+	int		is_moving;
 } t_player;
 
 typedef struct s_sprite
@@ -98,16 +99,19 @@ typedef struct s_game
 	char		**map;
 	void		*mlx;
 	void		*win;
+	int			width;
+	int			height;
 	int			collectibles;
 	int			collected;
 	int			moves;
 	int			player_dir;
 }	t_game;
 
+int	update_position(t_game *game);
 void		update_player_xy(t_game *game);
 void		move_player(t_game *game, int new_x, int new_y);
 int			render_map(t_game *game);
-void		render_player(t_game *game, int x, int y);
+void		render_player(t_game *game);
 char		**get_map(int fd);
 int			draw_map(t_game *game);
 void		scale_assests(t_mlx *mlx, t_img	*imgs, int map_width, int map_height);

@@ -69,7 +69,7 @@ t_img	*new_img(t_sprite	*sprite)
 	return (img);
 }
 
-t_frame	*new_frame(t_sprite	*sprite, int x, int y)
+t_frame	*new_frame(t_sprite	*sprite)
 {
 	t_frame	*frame;
 
@@ -81,7 +81,7 @@ t_frame	*new_frame(t_sprite	*sprite, int x, int y)
 	if (!frame->img)
 		return (free(frame), NULL);
 
-	cpy_img(sprite->img, frame->img, x, y);
+	cpy_img(sprite->img, frame->img, sprite->animations->x, sprite->animations->y);
 	frame->next = NULL;
 	return (frame);
 }
@@ -104,7 +104,7 @@ void	add_animation(t_animation **head, int y, void *mlx, void *win)
 	new->y = y;
 	new->frame_count = 6;
 	new->frame_idx = 0;
-	new->frame_delay = 10;
+	new->frame_delay = 4;
 	new->delay_counter = 0;
 	new->next = NULL;
 	if (!tmp)
@@ -113,7 +113,7 @@ void	add_animation(t_animation **head, int y, void *mlx, void *win)
 		tmp->next = new;
 }
 
-t_animation	*new_animations(void *mlx, void *win, int n)
+t_animation	*new_animations(t_sprite *sprite, int n)
 {
 	t_animation	*a;
 	int			i;
@@ -122,9 +122,9 @@ t_animation	*new_animations(void *mlx, void *win, int n)
 	a = NULL;
 	i = 0;
 	y = 0;
-	while (i < n)
+	while (i < n && y < sprite->img->height)
 	{
-		add_animation(&a, y, mlx, win);
+		add_animation(&a, y, sprite->mlx, sprite->win);
 		y += IMG_HEIGHT;
 		i++;
 	}
@@ -139,11 +139,9 @@ void	load_frames(t_sprite *sprite, int n)
 
 	i = 0;
 	tmp = sprite->animations->frames;
-	if (sprite->img->width <= IMG_WIDTH || sprite->img->height <= IMG_HEIGHT)
-		n = 1;
-	while (i < n)
+	while (i < n && sprite->animations->x < sprite->img->width)
 	{
-		new = new_frame(sprite, sprite->animations->x, sprite->animations->y);
+		new = new_frame(sprite);
 		if (!new)
 			return ;
 		if (!sprite->animations->frames)
@@ -170,7 +168,7 @@ void	load_animations(t_sprite *sprite, int n)
 	if (!sprite)
 		return;
 	i = 0;
-	sprite->animations = new_animations(sprite->mlx, sprite->win, n);
+	sprite->animations = new_animations(sprite, n);
 	if (!sprite->animations)
 		return ;
 	tmp = sprite->animations;

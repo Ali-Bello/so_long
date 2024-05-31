@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 15:39:30 by aderraj           #+#    #+#             */
-/*   Updated: 2024/05/30 01:08:35 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/05/31 02:01:19 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,36 +62,59 @@ int	draw_sprite(t_sprite *sprite, int x, int y)
 	return 0;
 }
 
-void render_player(t_game *game, int x, int y)
-{
-	t_animation	*player_animation;
-
-	if (!game->player_dir)
-		player_animation = game->assests[4]->animations->next->next->next->next->next->next;
-	else if (game->player_dir == 1)
-		player_animation = game->assests[4]->animations->next->next->next;
-	else if (game->player_dir == 2)
-		player_animation = game->assests[4]->animations->next->next->next->next->next;
-	else if (game->player_dir == 3)
-		player_animation = game->assests[4]->animations->next;
-	else
-		player_animation = game->assests[4]->animations;
-	draw_animation(player_animation, x, y);
-}
-
 void	render_img(t_game *game, char c, int x, int y)
 {
 	if (c == '1')
 		draw_sprite(game->assests[1], x, y);
 	else if (c != '1')
-		mlx_put_image_to_window(game->assests[0]->mlx, game->assests[0]->win,
+		mlx_put_image_to_window(game->mlx, game->win,
 			game->assests[0]->img->img_ptr, x, y);
-	if (c == 'P')
-		render_player(game, x, y);
-	else if (c == 'C')
+	if (c == 'C')
 		draw_sprite(game->assests[2], x, y);
 	else if (c == 'E')
 		draw_sprite(game->assests[3], x, y);
+}
+
+void render_player(t_game *game)
+{
+	t_animation	*player_animation;
+
+	player_animation = NULL;
+	if (game->player->is_moving)
+	{
+		if (!game->player_dir)
+			player_animation = game->assests[4]->animations->next->next->next->next;
+		else if (game->player_dir == 1)
+			player_animation = game->assests[4]->animations->next->next->next->next->next->next->next->next->next->next->next->next->next->next->next->next;
+		else if (game->player_dir == 2)
+			player_animation = game->assests[4]->animations->next->next->next->next->next->next->next->next->next->next->next->next->next;
+		else if (game->player_dir == 3)
+			player_animation = game->assests[4]->animations->next;
+	}
+	else
+		player_animation = game->assests[4]->animations;
+	draw_animation(player_animation, game->player->x_px, game->player->y_px);
+}
+
+void	update_positions(t_game *game)
+{
+	if (game->player->x_px < game->player->target_x)
+			game->player->x_px += 5;
+	if (game->player->x_px > game->player->target_x)
+		game->player->x_px -= 5;
+	if (game->player->y_px < game->player->target_y)
+		game->player->y_px += 5;
+	if (game->player->y_px > game->player->target_y)
+			game->player->y_px -= 5;
+	if (abs(game->player->x_px - game->player->target_x) < 5)
+		game->player->x_px = game->player->target_x;
+	if (abs(game->player->y_px - game->player->target_y) < 5)
+		game->player->y_px = game->player->target_y;
+	render_player(game);
+	if (game->player->x_px == game->player->target_x &&
+		game->player->y_px == game->player->target_y)
+		game->player->is_moving = 0;
+		return ;
 }
 
 int	render_map(t_game *game)
@@ -104,7 +127,6 @@ int	render_map(t_game *game)
 	i = 0;
 	y = 0;
 	get_player_xy(game);
-	mlx_clear_window(game->assests[0]->mlx, game->assests[0]->win);
 	while (game->map[i])
 	{
 		j = 0;
@@ -118,5 +140,7 @@ int	render_map(t_game *game)
 		y += IMG_HEIGHT;
 		i++;
 	}
+	update_positions(game);
+	mlx_do_sync(game->mlx);
 	return (0);
 }
