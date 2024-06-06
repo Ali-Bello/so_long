@@ -104,7 +104,7 @@ void	add_animation(t_animation **head, int y, void *mlx, void *win)
 	new->y = y;
 	new->frame_count = 6;
 	new->frame_idx = 0;
-	new->frame_delay = 4;
+	new->frame_delay = 7;
 	new->delay_counter = 0;
 	new->next = NULL;
 	if (!tmp)

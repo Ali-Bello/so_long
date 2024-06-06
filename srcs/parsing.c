@@ -149,8 +149,10 @@ void	map_check(char **map)
 	else if (!has_collectible(map))
 		printf("Error\nTHE MAP CONTAINS NO COLLECTIBLE\n");
 	else
+	{
 		printf("MAP IS VALID\n");
 		return;
+	}
 	exit (-1);
 }
 

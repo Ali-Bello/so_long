@@ -79,21 +79,18 @@ void render_player(t_game *game)
 {
 	t_animation	*player_animation;
 
-	player_animation = NULL;
-	if (game->player->is_moving)
-	{
-		if (!game->player_dir)
-			player_animation = game->assests[4]->animations->next->next->next->next;
-		else if (game->player_dir == 1)
-			player_animation = game->assests[4]->animations->next->next->next->next->next->next->next->next->next->next->next->next->next->next->next->next;
-		else if (game->player_dir == 2)
-			player_animation = game->assests[4]->animations->next->next->next->next->next->next->next->next->next->next->next->next->next;
-		else if (game->player_dir == 3)
-			player_animation = game->assests[4]->animations->next;
-	}
-	else
-		player_animation = game->assests[4]->animations;
+	player_animation = game->assests[4]->animations;
+	if (!game->player_dir)
+		player_animation = game->assests[4]->animations->next->next->next->next;
+	else if (game->player_dir == 1)
+		player_animation = game->assests[4]->animations->next->next->next->next->next->next->next->next->next->next->next->next->next->next->next->next;
+	else if (game->player_dir == 2)
+		player_animation = game->assests[4]->animations->next->next->next->next->next->next->next->next->next->next->next->next->next;
+	else if (game->player_dir == 3)
+		player_animation = game->assests[4]->animations->next;
+
 	draw_animation(player_animation, game->player->x_px, game->player->y_px);
+	mlx_do_sync(game->mlx);
 }
 
 void	update_positions(t_game *game)
@@ -114,7 +111,6 @@ void	update_positions(t_game *game)
 	if (game->player->x_px == game->player->target_x &&
 		game->player->y_px == game->player->target_y)
 		game->player->is_moving = 0;
-		return ;
 }
 
 int	render_map(t_game *game)

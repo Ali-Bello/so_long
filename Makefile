@@ -4,9 +4,9 @@ CC = gcc
 
 CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3
 
-MLXFLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
+MLXFLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
 
-SRCS = srcs/main2.c srcs/parsing.c srcs/render.c srcs/animation.c srcs/Moves.c #srcs/scaling.c srcs/Player.c
+SRCS = srcs/main2.c srcs/parsing.c srcs/render.c srcs/animation.c srcs/moves.c #srcs/scaling.c srcs/Player.c
 
 LIBFTPATH = includes/libft
 
@@ -17,7 +17,7 @@ INCLUDES = includes/get_next_line
 all : $(NAME)
 
 $(NAME) : $(SRCS) $(LIBFT)
-	$(CC) $(CFLAGS) $(MLXFLAGS) $(SRCS) $(INCLUDES)/*.c $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(SRCS) $(INCLUDES)/*.c $(LIBFT) $(MLXFLAGS) -o $(NAME)
 
 $(LIBFT) : $(LIBFTPATH)
 	make -C includes/libft
