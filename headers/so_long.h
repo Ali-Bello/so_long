@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 23:42:47 by aderraj           #+#    #+#             */
-/*   Updated: 2024/05/31 00:45:45 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/06/10 02:04:04 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # define SO_LONG_H
 
 #include <fcntl.h>
-#include <mlx.h>
+#include "mlx.h"
 #include "get_next_line.h"
 #include "libft.h"
 #include <stdio.h>
@@ -62,18 +62,6 @@ typedef struct s_animation
 	struct s_animation	*next;
 } t_animation;
 
-typedef struct s_player
-{
-	t_animation	*current_animation;
-	t_frame		*current_frame;
-	int		x;
-	int		y;
-	int		x_px;
-	int		y_px;
-	int		target_x;
-	int		target_y;
-	int		is_moving;
-} t_player;
 
 typedef struct s_sprite
 {
@@ -91,10 +79,23 @@ typedef struct s_mlx
 	int		height;
 }	t_mlx;
 
+typedef struct s_player
+{
+	t_animation	*current_animation;
+	t_frame		*current_frame;
+	int		x;
+	int		y;
+	int		x_px;
+	int		y_px;
+	int		target_x;
+	int		target_y;
+	int		is_moving;
+} t_player;
 
 typedef struct s_game
 {
 	t_sprite	**assests;
+	t_img		*bg;
 	t_player	*player;
 	char		**map;
 	void		*mlx;
@@ -107,7 +108,7 @@ typedef struct s_game
 	int			player_dir;
 }	t_game;
 
-int	update_position(t_game *game);
+int			update_position(t_game *game);
 void		update_player_xy(t_game *game);
 void		move_player(t_game *game, int new_x, int new_y);
 int			render_map(t_game *game);

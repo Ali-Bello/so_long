@@ -24,6 +24,8 @@ void	ft_mlx_pixel_put(t_img *data, int x, int y, int color)
 {
 	char	*dst;
 
+	if (color == (int)0xFF000000)
+		return ;
 	dst = data->img_data + (y * data->line_len + x * (data->bpp / 8));
 	*(unsigned int*)dst = color;
 }
@@ -34,7 +36,8 @@ unsigned int	get_pixel_img(t_img *img, int x, int y)
 			+ (y * img->line_len) + (x * img->bpp / 8))));
 }
 
-void cpy_img(t_img *src, t_img *dst, int x, int y) {
+void cpy_img(t_img *src, t_img *dst, int x, int y)
+{
 	int	i;
 	int	j;
 
@@ -175,9 +178,9 @@ void	load_animations(t_sprite *sprite, int n)
 	while (i < n)
 	{
 		load_frames(sprite, 6);
+		sprite->animations->current_frame = sprite->animations->frames;
 		sprite->animations = sprite->animations->next;
 		i++;
 	}
 	sprite->animations = tmp;
 }
-

@@ -4,7 +4,7 @@ CC = gcc
 
 CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3
 
-MLXFLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
+MLXFLAGS = -lXext -lX11 -lm mlx/libmlx_Linux.a
 
 SRCS = srcs/main2.c srcs/parsing.c srcs/render.c srcs/animation.c srcs/moves.c #srcs/scaling.c srcs/Player.c
 

@@ -7,7 +7,7 @@
 			"com.tldraw.asset": 1,
 			"com.tldraw.camera": 1,
 			"com.tldraw.document": 2,
-			"com.tldraw.instance": 24,
+			"com.tldraw.instance": 25,
 			"com.tldraw.instance_page_state": 5,
 			"com.tldraw.page": 1,
 			"com.tldraw.instance_presence": 5,
@@ -24,11 +24,12 @@
 			"com.tldraw.shape.note": 6,
 			"com.tldraw.shape.line": 4,
 			"com.tldraw.shape.frame": 0,
-			"com.tldraw.shape.arrow": 3,
+			"com.tldraw.shape.arrow": 4,
 			"com.tldraw.shape.highlight": 0,
 			"com.tldraw.shape.embed": 4,
 			"com.tldraw.shape.image": 3,
-			"com.tldraw.shape.video": 2
+			"com.tldraw.shape.video": 2,
+			"com.tldraw.binding.arrow": 0
 		}
 	},
 	"records": [
@@ -42,9 +43,9 @@
 		{
 			"id": "pointer:pointer",
 			"typeName": "pointer",
-			"x": 435.7149554083768,
-			"y": -781.7036883418052,
-			"lastActivityTimestamp": 1716228734740,
+			"x": 447.42502831742877,
+			"y": 3371.9129234245147,
+			"lastActivityTimestamp": 1717709625611,
 			"meta": {}
 		},
 		{
@@ -61,7 +62,7 @@
 			"brush": null,
 			"scribbles": [],
 			"cursor": {
-				"type": "cross",
+				"type": "default",
 				"rotation": 0
 			},
 			"isFocusMode": false,
@@ -71,8 +72,8 @@
 			"screenBounds": {
 				"x": 0,
 				"y": 0,
-				"w": 753.47216796875,
-				"h": 881.9443969726562
+				"w": 1970.9627685546875,
+				"h": 1133.6295166015625
 			},
 			"insets": [
 				false,
@@ -86,7 +87,6 @@
 			"chatMessage": "",
 			"isChatting": false,
 			"highlightedUserIds": [],
-			"canMoveCamera": true,
 			"isFocused": true,
 			"devicePixelRatio": 2.880000114440918,
 			"isCoarsePointer": false,
@@ -114,9 +114,9 @@
 			"typeName": "instance_page_state"
 		},
 		{
-			"x": 84.39041139295816,
-			"y": 1395.992403489108,
-			"z": 0.8732204770108034,
+			"x": 1656.689109635468,
+			"y": -2048.1532959273013,
+			"z": 0.4918230375313373,
 			"meta": {},
 			"id": "camera:page:page",
 			"typeName": "camera"

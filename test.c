@@ -1,6 +1,5 @@
 // File: animation.c
 #include "headers/so_long.h"
-#include <mlx.h>
 #include <stdlib.h>
 #include <unistd.h>
 
