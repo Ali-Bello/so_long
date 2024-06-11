@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 15:39:30 by aderraj           #+#    #+#             */
-/*   Updated: 2024/06/10 02:02:25 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/06/11 01:22:38 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	ft_cpy_img(t_img *src, t_img *dst, int x, int y)
 		while (j < src->width && (x + j) < dst->width)
 		{
 			src_idx = (i * src->line_len) + (j * src->bpp / 8);
-			dst_idx = ((y + i) * dst->line_len) + ((x + j) * src->bpp /8);
+			dst_idx = ((y + i) * dst->line_len) + ((x + j) * src->bpp / 8);
 			ft_cpy_pixel(src, dst, src_idx, dst_idx);
 			j++;
 		}
@@ -49,9 +49,9 @@ void	ft_cpy_img(t_img *src, t_img *dst, int x, int y)
 
 void	set_asset(t_game *game, char c, int x, int y)
 {
-	t_sprite *tmp;
+	t_sprite	*tmp;
 
-	tmp = game-> assests[0];
+	tmp = game->assests[0];
 	if (c == '1')
 		tmp = game->assests[1];
 	else
@@ -91,6 +91,7 @@ int	render_map(t_game *game)
 		y += IMG_HEIGHT;
 		i++;
 	}
+	update_player(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->bg->img_ptr, 0, 0);
 	mlx_do_sync(game->mlx);
 	return (0);

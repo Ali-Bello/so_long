@@ -6,7 +6,7 @@ CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3
 
 MLXFLAGS = -lXext -lX11 -lm mlx/libmlx_Linux.a
 
-SRCS = srcs/main2.c srcs/parsing.c srcs/render.c srcs/animation.c srcs/moves.c #srcs/scaling.c srcs/Player.c
+SRCS = srcs/main2.c srcs/parsing.c srcs/render.c srcs/animation.c srcs/player.c #srcs/scaling.c srcs/Player.c
 
 LIBFTPATH = includes/libft
 

@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 23:42:47 by aderraj           #+#    #+#             */
-/*   Updated: 2024/06/10 02:04:04 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/06/11 01:17:50 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 #define SCREEN_HEIGHT 1080
 #define IMG_WIDTH 64
 #define IMG_HEIGHT 64
-
+#define STEP_SIZE 10
 typedef struct s_img
 {
 	void	*img_ptr;
@@ -108,18 +108,15 @@ typedef struct s_game
 	int			player_dir;
 }	t_game;
 
-int			update_position(t_game *game);
-void		update_player_xy(t_game *game);
+
+void		ft_cpy_pixel(t_img *src, t_img *dst, int src_idx, int dst_idx);
+void		ft_cpy_img(t_img *src, t_img *dst, int x, int y);
+int			update_player(t_game *game);
 void		move_player(t_game *game, int new_x, int new_y);
 int			render_map(t_game *game);
 void		render_player(t_game *game);
 char		**get_map(int fd);
-int			draw_map(t_game *game);
-void		scale_assests(t_mlx *mlx, t_img	*imgs, int map_width, int map_height);
 t_sprite	*new_sprite(char *filename, void *mlx, void *win);
 void		load_animations(t_sprite *sprite, int n);
-int			draw_sprite(t_sprite *sprite, int x, int y);
-void		get_player_xy(t_game *game);
-void 		move_player(t_game *game, int new_x, int new_y);
-void		draw_animation(t_animation *animation, int x, int y);
+void		get_player_mapxy(t_game *game);
 #endif

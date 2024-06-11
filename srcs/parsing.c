@@ -89,8 +89,8 @@ int	is_border(char *str)
 
 int	is_enclosed(char **map)
 {
-	int		i;
-	int		j;
+	int	i;
+	int	j;
 
 	if (!is_border(*map))
 		return (0);
@@ -122,9 +122,8 @@ int	is_valid_chars(char **map)
 		j = 0;
 		while (map[i][j])
 		{
-			if (map[i][j] != '1' && map[i][j] != '0'
-				&& map[i][j] != 'E' && map[i][j] != 'P'
-				&& map[i][j] != 'C')
+			if (map[i][j] != '1' && map[i][j] != '0' && map[i][j] != 'E'
+				&& map[i][j] != 'P' && map[i][j] != 'C')
 				return (0);
 			j++;
 		}
@@ -135,7 +134,7 @@ int	is_valid_chars(char **map)
 void	map_check(char **map)
 {
 	if (!map)
-		return;
+		return ;
 	if (!is_valid_chars(map))
 		printf("Error\nTHE MAP CONTAINS INVALID CHARACTERS\n");
 	else if (!is_enclosed(map))
@@ -151,9 +150,9 @@ void	map_check(char **map)
 	else
 	{
 		printf("MAP IS VALID\n");
-		return;
+		return ;
 	}
-	exit (-1);
+	exit(-1);
 }
 
 int	new_line_check(char *str)
@@ -181,14 +180,14 @@ char	**get_map(int fd)
 	{
 		line = get_next_line(fd);
 		if (!line)
-			break;
+			break ;
 		if (!new_line_check(line))
 		{
 			if (buffer)
 				free(buffer);
 			free(line);
 			printf("Error\nMAP CONTAINS INVALID CHARS\n");
-			exit (-1);
+			exit(-1);
 		}
 		buffer = ft_strjoin(buffer, line);
 		free(line);
