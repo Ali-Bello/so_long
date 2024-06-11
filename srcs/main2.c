@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:40:21 by aderraj           #+#    #+#             */
-/*   Updated: 2024/06/11 03:32:17 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/06/11 06:39:50 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,14 @@ int	apply_moves(int keycode, t_game *game)
 		move_player(game, game->player->x - 1, game->player->y);
 	else if (keycode == 119)
 		move_player(game, game->player->x, game->player->y - 1);
+	return (0);
+}
+
+int	stop_moving(int keycode, t_game *game)
+{
+	if (keycode == 97 || keycode == 100 ||
+		keycode == 115 || keycode == 119)
+		game->player->is_moving = 0;
 	return (0);
 }
 
@@ -105,6 +113,7 @@ int	main(int ac, char **av)
 	/*********/
 	
 	mlx_hook(game.win, 2, 1L<<0, apply_moves, &game);
+	mlx_hook(game.win, 3, 1L<<1, stop_moving, &game);
 	mlx_loop_hook(game.mlx, render_map, &game);
 	mlx_loop(game.mlx);
 }
