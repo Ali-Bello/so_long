@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 02:05:17 by aderraj           #+#    #+#             */
-/*   Updated: 2024/06/11 03:49:59 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/06/11 06:18:01 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,17 +94,17 @@ void	render_player(t_game *game)
 			game->player->x_px += STEP_SIZE;
 		else if (game->player_dir == 2)
 			game->player->y_px -= STEP_SIZE;
-		else if (game->player_dir == 1)
+		else if (game->player_dir == 3)
 			game->player->y_px += STEP_SIZE;
 		if (abs(game->player->target_x - game->player->x_px) <= STEP_SIZE)
 		{
 			game->player->x_px = game->player->target_x;
-			game->player->x = game->player->target_x % IMG_WIDTH;
+			game->player->x = game->player->target_x / IMG_WIDTH;
 		}
 		if (abs(game->player->target_y - game->player->y_px) <= STEP_SIZE)
 		{
 			game->player->y_px = game->player->target_y;
-			game->player->y = game->player->target_y % IMG_HEIGHT;
+			game->player->y = game->player->target_y / IMG_HEIGHT;
 		}
 	}
 	if (abs(game->player->target_x - game->player->x_px) <= STEP_SIZE
@@ -118,13 +118,13 @@ int	update_player(t_game *game)
 	if (game->player->is_moving)
 	{
 		if (!game->player_dir)
-			game->player->current_animation = get_animation(game, 4, 6);
+			game->player->current_animation = get_animation(game, 4, 7);
 		else if (game->player_dir == 1)
-			game->player->current_animation = get_animation(game, 4, 9);
+			game->player->current_animation = get_animation(game, 4, 19);
 		else if (game->player_dir == 2)
-			game->player->current_animation = get_animation(game, 4, 16);
+			game->player->current_animation = get_animation(game, 4, 13);
 		else if (game->player_dir == 3)
-			game->player->current_animation = get_animation(game, 4, 12);
+			game->player->current_animation = get_animation(game, 4, 1);
 	}
 	else
 		game->player->current_animation = game->assests[4]->animations;
