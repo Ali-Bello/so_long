@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 02:05:17 by aderraj           #+#    #+#             */
-/*   Updated: 2024/06/12 03:59:18 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/06/12 08:29:47 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,14 +106,25 @@ void	render_player(t_game *game)
 			game->player->x_px = game->player->target_x;
 		if (abs(game->player->target_y - game->player->y_px) <= STEP_SIZE)
 			game->player->y_px = game->player->target_y;
-	}
-	if (game->player->x_px == game->player->target_x &&
-		game->player->y_px == game->player->target_y)
-	{
 		
+		if (game->player->x_px == game->player->target_x && game->player->y_px == game->player->target_y)
+		{
+            game->player->x = game->player->target_x / IMG_WIDTH;
+			game->player->y = game->player->target_y / IMG_HEIGHT;
+            game->player->is_moving = 0;
+
+            // Check if there are additional movements queued
+            if (game->player->moving_x || game->player->moving_y)
+			{
+            	game->player->target_x = game->player->moving_x;
+                game->player->target_y = game->player->moving_y;
+                game->player->moving_x = 0;
+                game->player->moving_y = 0;
+                game->player->is_moving = 1;
+            }
+        }
 	}
 }
-
 
 int	update_player(t_game *game)
 {
