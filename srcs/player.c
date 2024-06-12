@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 02:05:17 by aderraj           #+#    #+#             */
-/*   Updated: 2024/06/12 08:29:47 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/06/12 09:25:40 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,30 @@ void	get_player_mapxy(t_game *game)
 	game->player->y = i;
 	game->player->x_px = j * IMG_WIDTH;
 	game->player->y_px = i * IMG_HEIGHT;
+	game->player->target_x = game->player->x_px;
+	game->player->target_y = game->player->y_px;
+}
+
+void	add_to_qeue(t_queue **queue, int x, int y)
+{
+	t_queue	*tmp;
+	t_queue	*new;
+
+	new = malloc(sizeof(t_queue));
+	if (!new)
+		return ;
+	new->x = x * IMG_WIDTH;
+	new->y = y * IMG_HEIGHT;
+	new->next = NULL;
+	if (!*queue)
+	{
+		*queue = new;
+		return ;
+	}
+	tmp = *queue;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
 }
 
 void	move_player(t_game *game, int new_x, int new_y)
@@ -57,10 +81,7 @@ void	move_player(t_game *game, int new_x, int new_y)
 	else if (new_y > game->player->y)
 		game->player_dir = 3;
 	if (game->player->is_moving)
-	{
-		game->player->moving_x = new_x * IMG_WIDTH;
-		game->player->moving_y = new_y * IMG_WIDTH;
-	}
+		add_to_qeue(&game->player->path, new_x, new_y);
 	else
 	{
 		game->player->target_x = new_x * IMG_WIDTH;
@@ -106,24 +127,22 @@ void	render_player(t_game *game)
 			game->player->x_px = game->player->target_x;
 		if (abs(game->player->target_y - game->player->y_px) <= STEP_SIZE)
 			game->player->y_px = game->player->target_y;
-		
-		if (game->player->x_px == game->player->target_x && game->player->y_px == game->player->target_y)
-		{
-            game->player->x = game->player->target_x / IMG_WIDTH;
-			game->player->y = game->player->target_y / IMG_HEIGHT;
-            game->player->is_moving = 0;
-
-            // Check if there are additional movements queued
-            if (game->player->moving_x || game->player->moving_y)
-			{
-            	game->player->target_x = game->player->moving_x;
-                game->player->target_y = game->player->moving_y;
-                game->player->moving_x = 0;
-                game->player->moving_y = 0;
-                game->player->is_moving = 1;
-            }
-        }
 	}
+	if (game->player->x_px == game->player->target_x && game->player->y_px == game->player->target_y)
+	{
+        game->player->x = game->player->target_x / IMG_WIDTH;
+		game->player->y = game->player->target_y / IMG_HEIGHT;
+		game->player->is_moving = 0;
+		if (game->player->path)
+		{
+			game->player->target_x = game->player->path->x;
+			game->player->target_y = game->player->path->y;
+			t_queue	*tmp = game->player->path;
+			game->player->path = game->player->path->next;
+			free(tmp);
+			game->player->is_moving = 1;
+		}
+    }
 }
 
 int	update_player(t_game *game)

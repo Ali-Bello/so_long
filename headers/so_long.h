@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 23:42:47 by aderraj           #+#    #+#             */
-/*   Updated: 2024/06/12 03:42:48 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/06/12 09:16:45 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,13 @@ typedef struct s_mlx
 	int		height;
 }	t_mlx;
 
+typedef struct s_queue
+{
+	int		x;
+	int		y;
+	struct s_queue	*next;
+} t_queue;
+
 typedef struct s_player
 {
 	t_animation	*current_animation;
@@ -89,9 +96,8 @@ typedef struct s_player
 	int		y_px;
 	int		target_x;
 	int		target_y;
-	int		moving_x;
-	int		moving_y;
 	int		is_moving;
+	t_queue	*path;
 } t_player;
 
 typedef struct s_game
