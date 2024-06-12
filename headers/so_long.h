@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 23:42:47 by aderraj           #+#    #+#             */
-/*   Updated: 2024/06/11 06:43:21 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/06/12 03:42:48 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ typedef struct s_player
 	int		y_px;
 	int		target_x;
 	int		target_y;
+	int		moving_x;
+	int		moving_y;
 	int		is_moving;
 } t_player;
 

@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 02:05:17 by aderraj           #+#    #+#             */
-/*   Updated: 2024/06/11 06:45:02 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/06/12 03:59:18 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,9 @@ void	move_player(t_game *game, int new_x, int new_y)
 		game->map[game->player->y][game->player->x] = '0';
 		game->collected++;
 	}
-	else if (game->map[new_y][new_x] == 'E')
-	{
-		if (game->collected >= game->collectibles)
+	else if (game->map[new_y][new_x] == 'E' &&
+		game->collected >= game->collectibles)
 			exit(0);
-	}
 	else if (game->map[new_y][new_x] == '0')
 		game->map[game->player->y][game->player->x] = '0';
 	if (new_x < game->player->x)
@@ -58,8 +56,16 @@ void	move_player(t_game *game, int new_x, int new_y)
 		game->player_dir = 2;
 	else if (new_y > game->player->y)
 		game->player_dir = 3;
-	game->player->target_x = new_x * IMG_WIDTH;
-	game->player->target_y = new_y * IMG_HEIGHT;
+	if (game->player->is_moving)
+	{
+		game->player->moving_x = new_x * IMG_WIDTH;
+		game->player->moving_y = new_y * IMG_WIDTH;
+	}
+	else
+	{
+		game->player->target_x = new_x * IMG_WIDTH;
+		game->player->target_y = new_y * IMG_HEIGHT;
+	}
 	game->player->is_moving = 1;
 	game->moves++;
 }
@@ -97,19 +103,15 @@ void	render_player(t_game *game)
 		else if (game->player_dir == 3)
 			game->player->y_px += STEP_SIZE;
 		if (abs(game->player->target_x - game->player->x_px) <= STEP_SIZE)
-		{
 			game->player->x_px = game->player->target_x;
-			game->player->x = game->player->target_x / IMG_WIDTH;
-		}
 		if (abs(game->player->target_y - game->player->y_px) <= STEP_SIZE)
-		{
 			game->player->y_px = game->player->target_y;
-			game->player->y = game->player->target_y / IMG_HEIGHT;
-		}
 	}
-	if (abs(game->player->target_x - game->player->x_px) <= STEP_SIZE
-		&& abs(game->player->target_y - game->player->y_px) <= STEP_SIZE)
-		game->player->is_moving = 0;
+	if (game->player->x_px == game->player->target_x &&
+		game->player->y_px == game->player->target_y)
+	{
+		
+	}
 }
 
 
