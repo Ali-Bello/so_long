@@ -1,19 +1,21 @@
 {
-    "configurations": [
-        {
-            "name": "Linux",
-            "includePath": [],
-            "defines": [],
-            "compilerPath": "/usr/bin/gcc",
-            "cStandard": "c17",
-            "cppStandard": "gnu++17",
-            "intelliSenseMode": "${default}",
-            "browse": {
-                "path": [
-                    "/usr/include/"
-                ]
-            }
-        }
-    ],
-    "version": 4
+  "configurations": [
+    {
+      "name": "linux-gcc-x64",
+      "includePath": [
+        "${workspaceFolder}/**"
+      ],
+      "defines": [],
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "c17",
+      "cppStandard": "gnu++17",
+      "intelliSenseMode": "linux-gcc-x64",
+      "browse": {
+        "path": [
+          "/usr/include/"
+        ]
+      }
+    }
+  ],
+  "version": 4
 }

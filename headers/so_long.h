@@ -27,11 +27,11 @@
 #define IMG_WIDTH 64
 #define IMG_HEIGHT 64
 #define STEP_SIZE 10
+
 typedef struct s_img
 {
 	void	*img_ptr;
 	char	*img_data;
-	char	*scaled_img;
 	int		bpp;
 	int		line_len;
 	int		endian;
@@ -71,20 +71,6 @@ typedef struct s_sprite
 	void		*win;
 }	t_sprite;
 
-typedef struct s_mlx
-{
-	void	*mlx;
-	void	*window;
-	int		width;
-	int		height;
-}	t_mlx;
-
-typedef struct s_queue
-{
-	int		x;
-	int		y;
-	struct s_queue	*next;
-} t_queue;
 
 typedef struct s_player
 {
@@ -97,7 +83,6 @@ typedef struct s_player
 	int		target_x;
 	int		target_y;
 	int		is_moving;
-	t_queue	*path;
 } t_player;
 
 typedef struct s_game
@@ -116,15 +101,16 @@ typedef struct s_game
 	int			player_dir;
 }	t_game;
 
-
 void		ft_cpy_pixel(t_img *src, t_img *dst, int src_idx, int dst_idx);
 void		ft_cpy_img(t_img *src, t_img *dst, int x, int y);
 int			update_player(t_game *game);
-void		move_player(t_game *game, int new_x, int new_y);
-int			render_map(t_game *game);
-void		render_player(t_game *game);
-char		**get_map(int fd);
-t_sprite	*new_sprite(char *filename, void *mlx, void *win);
+void 		move_player(t_game *game, int new_x, int new_y);
+void 		set_positions(t_game *game, int new_x, int new_y);
+int 		render_map(t_game *game);
+void 		render_player(t_game *game);
+char 		**get_map(int fd);
+t_sprite 	*new_sprite(char *filename, void *mlx, void *win);
 void		load_animations(t_sprite *sprite, int n);
 void		get_player_mapxy(t_game *game);
+
 #endif
