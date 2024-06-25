@@ -75,6 +75,7 @@ int	main(int ac, char **av)
 	game.collectibles = 7;
 	game.collected = 0;
 	game.moves = 0;
+	game.move_delay = 0;
 	game.player_dir = -1;
 	/********************************/
 	/**ASSESTS*/

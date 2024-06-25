@@ -98,6 +98,7 @@ typedef struct s_game
 	int			collectibles;
 	int			collected;
 	int			moves;
+	int			move_delay;
 	int			player_dir;
 }	t_game;
 

@@ -53,9 +53,26 @@ void set_positions(t_game *game, int new_x, int new_y)
     game->player->x = new_x;
     game->player->y = new_y;
 }
-
+void	move_to_closest_cell(t_game *game)
+{
+	if (game->move_delay < 2)
+	{
+		game->move_delay++;
+		return ;
+	}
+	else
+		game->move_delay = 0;
+	render_player(game);
+}
 void	move_player(t_game *game, int new_x, int new_y)
 {
+	// if (game->player_dir != -1 && game->move_delay < 14)
+	// {
+	// 	game->move_delay++;
+	// 	return ;
+	// }
+	// else if (game->player_dir != -1 && game->move_delay == 14)
+	// 	game->move_delay = 0;
 	if (game->map[new_y][new_x] == '1')
 		return ;
 	else if (game->map[new_y][new_x] == 'C')
@@ -65,9 +82,9 @@ void	move_player(t_game *game, int new_x, int new_y)
 	if (game->player_dir != -1)
 	{
 		while (game->player->y_px != game->player->target_y)
-			render_player(game);
+			move_to_closest_cell(game);
 		while (game->player->x_px != game->player->target_x)
-			render_player(game);
+			move_to_closest_cell(game);
 	}
     set_positions(game, new_x, new_y);
     game->moves++;
@@ -132,6 +149,6 @@ int	update_player(t_game *game)
 		game->player->current_animation = get_animation(game, 4, 1);
 	else
 		game->player->current_animation = game->assests[4]->animations;
-	render_player(game);
+	move_to_closest_cell(game);
 	return (0);	
 }
