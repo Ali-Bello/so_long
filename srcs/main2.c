@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:40:21 by aderraj           #+#    #+#             */
-/*   Updated: 2024/06/12 09:35:02 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/06/25 20:53:15 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,12 @@ int	main(int ac, char **av)
 	
 	/**PLAYER*/
 	game.player = malloc(sizeof(t_player));
-	*(game.player) = (t_player){game.assests[4]->animations, NULL, 0, 0, 0, 0,
+	*(game.player) = (t_player){game.assests[4]->animations, NULL, 0, 0, 0, 0, 0, 0,
 		0, 0, 0};
 	get_player_mapxy(&game);
 	/*********/
-	
+	render_map(&game);
 	mlx_hook(game.win, 2, 1L<<0, apply_moves, &game);
-	mlx_loop_hook(game.mlx, render_map, &game);
+	mlx_loop_hook(game.mlx, update_player, &game);
 	mlx_loop(game.mlx);
 }

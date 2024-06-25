@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 15:39:30 by aderraj           #+#    #+#             */
-/*   Updated: 2024/06/11 01:22:38 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/06/25 20:53:06 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,5 @@ int	render_map(t_game *game)
 		y += IMG_HEIGHT;
 		i++;
 	}
-	update_player(game);
-	mlx_put_image_to_window(game->mlx, game->win, game->bg->img_ptr, 0, 0);
-	mlx_do_sync(game->mlx);
 	return (0);
 }

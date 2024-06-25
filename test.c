@@ -3,21 +3,18 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int	print_key(int keycode)
-{
-	printf("keycode = [%d]\n", keycode);
-	return (0);
+#include <math.h>
+
+int round_to_nearest_multiple(int x, int y) {
+    if (y == 0) {
+        return 0; // Return 0 for invalid multiple
+    }
+    return floor((double)x / y) * y;
 }
+
 
 int main()
 {
-	void *mlx, *win;
-
-	mlx = mlx_init();
-	win = mlx_new_window(mlx, 900 ,	 900, "keys");
-
-	mlx_hook(win, 2, 1L<<0, print_key, NULL);
-	mlx_loop(mlx);
-    return (0);
+	printf("%d\n", round_to_nearest_multiple(129, 64));
 }
 
