@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 02:05:17 by aderraj           #+#    #+#             */
-/*   Updated: 2024/06/25 20:56:46 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/06/27 22:45:03 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,13 @@ void	move_player(t_game *game, int new_x, int new_y)
 	if (game->player_dir != -1)
 	{
 		while (game->player->y_px != game->player->target_y)
-			render_player(game);
+			render_player(game);	
 		while (game->player->x_px != game->player->target_x)
 			render_player(game);
 	}
-	game->player->init_x = game->player->x * 64;
-	game->player->init_y = game->player->y * 64;
     set_positions(game, new_x, new_y);
     game->moves++;
+	render_player(game);
 }
 
 t_animation *get_animation(t_game *game, int a_idx, int f_idx)
@@ -94,11 +93,11 @@ t_animation *get_animation(t_game *game, int a_idx, int f_idx)
 
 void	draw_player(t_game *game)
 {
-	// printf("init_x = [%d], init_y = [%d]\n", game->player->init_x, game->player->init_y);
+	ft_cpy_img(game->assests[0]->img, game->bg, game->player->init_x, game->player->init_y);
 	if (!game->player->current_frame)
 		game->player->current_frame = game->player->current_animation->frames;
 	ft_cpy_img(game->player->current_frame->img, game->bg, game->player->x_px, game->player->y_px);
-	if (!game->player->current_animation->delay_counter)
+	if (game->player->current_animation->delay_counter < 20)
 	{
 		game->player->current_animation->delay_counter++;
 		return ;
@@ -112,19 +111,8 @@ void	draw_player(t_game *game)
 
 void	render_player(t_game *game)
 {
-	printf("init_x = [%d], init_y = [%d]\n", game->player->init_x, game->player->init_y);
-	printf("target_x = [%d], target_y = [%d]\n", game->player->target_x, game->player->target_y);
-	ft_cpy_img(game->assests[0]->animations->current_frame->img, game->bg, game->player->init_x, game->player->y);
-	ft_cpy_img(game->assests[0]->animations->current_frame->img, game->bg, game->player->target_x, game->player->target_y);
-	draw_player(game);
-	
-	if (game->player_dir != -1 && game->move_delay < 1)
-	{
-		game->move_delay++;
-		return ;
-	}
-	else if (game->player_dir != -1 && game->move_delay == 1)
-		game->move_delay = 0;
+	ft_cpy_img(game->assests[0]->img, game->bg, game->player->init_x, game->player->init_y);
+	ft_cpy_img(game->assests[0]->img, game->bg, game->player->target_x, game->player->target_y);
 	if (!game->player_dir)
 		game->player->x_px -= STEP_SIZE;
 	else if (game->player_dir == 1)
@@ -138,8 +126,11 @@ void	render_player(t_game *game)
 	{
 		game->player->x_px = game->player->target_x;
 		game->player->y_px = game->player->target_y;
+		game->player->init_x = game->player->x_px;
+        game->player->init_y = game->player->y_px;
 		game->player_dir = -1;
 	}
+	draw_player(game);
 }
 
 int	update_player(t_game *game)
