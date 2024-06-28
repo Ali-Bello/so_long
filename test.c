@@ -1,20 +1,19 @@
-// File: animation.c
-#include "headers/so_long.h"
-#include <stdlib.h>
-#include <unistd.h>
-
+#include <stdio.h>
 #include <math.h>
 
-int round_to_nearest_multiple(int x, int y) {
-    if (y == 0) {
-        return 0; // Return 0 for invalid multiple
-    }
-    return floor((double)x / y) * y;
+int floor_to_nearest(int num, int base)
+{
+    return (base * floor((float)num / base));
 }
-
 
 int main()
 {
-	printf("%d\n", round_to_nearest_multiple(129, 64));
+    int num = 124;
+    int base = 64;
+    int result = floor_to_nearest(num, base);
+
+    printf("floor_to_nearest(%d, %d) = %d\n", num, base, result);
+
+    return 0;
 }
 

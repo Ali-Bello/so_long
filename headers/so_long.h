@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 23:42:47 by aderraj           #+#    #+#             */
-/*   Updated: 2024/06/27 22:45:13 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/06/28 20:41:15 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 #define SCREEN_HEIGHT 1080
 #define IMG_WIDTH 64
 #define IMG_HEIGHT 64
-#define STEP_SIZE 10
+#define STEP_SIZE 4
 
 typedef struct s_img
 {
