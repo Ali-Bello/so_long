@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 02:05:17 by aderraj           #+#    #+#             */
-/*   Updated: 2024/06/30 01:15:54 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/06/30 22:07:22 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,62 +37,42 @@ void	get_player_mapxy(t_game *game)
 	game->player->target_y = game->player->y_px;
 }
 
-void set_positions(t_game *game, int new_x, int new_y)
+
+void draw_background(t_game *game)
 {
-    if (game->player->x > new_x)
-        game->player_dir = 0;
-    else if (game->player->x < new_x)
-        game->player_dir = 1;
-    if (game->player->y > new_y)
-        game->player_dir = 2;
-    else if (game->player->y < new_y)
-        game->player_dir = 3;
-    game->map[new_y][new_x] = 'P';
-    game->map[game->player->y][game->player->x] = '0';
-    game->player->target_y = new_y * IMG_WIDTH;
-    game->player->target_x = new_x * IMG_WIDTH;
-    game->player->x = new_x;
-    game->player->y = new_y; 
-	game->player->is_moving = 1;
+    static int prev_grid_x = -1, prev_grid_y = -1;
+    int grid_x = game->player->x_px / IMG_WIDTH, grid_y = game->player->y_px / IMG_HEIGHT;
+
+    int min_x = fmax(fmin(prev_grid_x, grid_x) - 1, 0);
+    int max_x = fmin(fmax(prev_grid_x, grid_x) + 1, game->width / IMG_WIDTH - 1);
+    int min_y = fmax(fmin(prev_grid_y, grid_y) - 1, 0);
+    int max_y = fmin(fmax(prev_grid_y, grid_y) + 1, game->height / IMG_HEIGHT - 1);
+
+    for (int y = min_y; y <= max_y; y++) {
+        for (int x = min_x; x <= max_x; x++) {
+            int assetIndex = 0; // Default to first asset for '0', 'P', 'C'
+            if (game->map[y][x] == 'E') 
+            {
+				assetIndex = 3;
+				ft_cpy_img(game->assests[0]->img, game->bg, x * IMG_WIDTH, y * IMG_HEIGHT);
+			}
+			else if (game->map[y][x] == '1') assetIndex = 1;
+			else if (game->map[y][x] == 'C')
+			{
+				ft_cpy_img(game->assests[0]->img, game->bg, x * IMG_WIDTH, y * IMG_HEIGHT);
+				assetIndex = 2;
+			}
+            ft_cpy_img(game->assests[assetIndex]->animations->frames->img, game->bg, x * IMG_WIDTH, y * IMG_HEIGHT);
+        }
+    }
+    prev_grid_x = grid_x;
+    prev_grid_y = grid_y;
 }
 
-void	draw_background(t_game *game)
-{
-    int	grid_x;
-    int	grid_y;
-	static int flag;
-
-    printf("player x: %d, player y: %d\n", game->player->x_px, game->player->y_px);
-    flag = 0;
-	grid_x = game->player->x_px / IMG_WIDTH;
-    grid_y = game->player->y_px / IMG_HEIGHT;
-    if (!game->player_dir)
-		grid_x++;
-	else if (game->player_dir == 2)
-		grid_y++;
-	if (game->player->y_px == game->player->target_y
-		&& game->player->x_px == game->player->target_x)
-		flag = 1;
-	if (flag)
-	{
-		flag = 0;
-		grid_y++;
-	}
-	printf("grid x: %d, grid y: %d\n", grid_x, grid_y);
-    printf("game->map[grid_y][grid_x]: %c\n", game->map[grid_y][grid_x]);
-    if (game->map[grid_y][grid_x] == '0')
-	{
-		printf("drawn\n");
-        ft_cpy_img(game->assests[0]->animations->frames->img,
-            game->bg, grid_x * IMG_WIDTH, grid_y * IMG_HEIGHT);
-	}
-	ft_cpy_img(game->assests[0]->img, game->bg, game->player->target_x, game->player->target_y);
-}
 
 void	render_player(t_game *game)
 {
 	draw_background(game);
-	// usleep(100000);
     if (!game->player->current_frame)
         game->player->current_frame = game->player->current_animation->frames;
     ft_cpy_img(game->player->current_frame->img,
@@ -109,6 +89,24 @@ void	render_player(t_game *game)
 	if (game->player->x_px == game->player->target_x
 		&& game->player->y_px == game->player->target_y)
 		game->player_dir = -1;
+}
+
+void set_positions(t_game *game, int new_x, int new_y)
+{
+    if (game->player->x > new_x)
+        game->player_dir = 0;
+    else if (game->player->x < new_x)
+        game->player_dir = 1;
+    if (game->player->y > new_y)
+        game->player_dir = 2;
+    else if (game->player->y < new_y)
+        game->player_dir = 3;
+    game->map[new_y][new_x] = 'P';
+    game->map[game->player->y][game->player->x] = '0';
+    game->player->target_y = new_y * IMG_WIDTH;
+    game->player->target_x = new_x * IMG_WIDTH;
+    game->player->x = new_x;
+    game->player->y = new_y; 
 }
 
 void	move_player(t_game *game, int new_x, int new_y)
