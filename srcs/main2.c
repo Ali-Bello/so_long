@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:40:21 by aderraj           #+#    #+#             */
-/*   Updated: 2024/06/28 22:46:50 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/06/30 01:03:34 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	get_height(char **map)
 
 void	load_assests(t_game *game)
 {
-	game->assests[0] = new_sprite("textures/Ground_64.xpm", game->mlx,
+	game->assests[0] = new_sprite("textures/Ground.xpm", game->mlx,
 			game->win);
 	load_animations(game->assests[0], 1);
 	game->assests[1] = new_sprite("textures/Walls.xpm", game->mlx, game->win);

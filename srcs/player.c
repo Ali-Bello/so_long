@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 02:05:17 by aderraj           #+#    #+#             */
-/*   Updated: 2024/06/29 01:07:48 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/06/30 01:15:54 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,37 +52,54 @@ void set_positions(t_game *game, int new_x, int new_y)
     game->player->target_y = new_y * IMG_WIDTH;
     game->player->target_x = new_x * IMG_WIDTH;
     game->player->x = new_x;
-    game->player->y = new_y;
+    game->player->y = new_y; 
+	game->player->is_moving = 1;
 }
+
 void	draw_background(t_game *game)
 {
-	if (game->map[game->player->y][game->player->x] == '0')
-		ft_cpy_img(game->assests[0]->animations->frames->img,
-				game->bg, game->player->x * IMG_WIDTH, game->player->y * IMG_HEIGHT);
-	if (game->map[game->player->y - 1][game->player->x] == '0')
-		ft_cpy_img(game->assests[0]->animations->frames->img,
-				game->bg, game->player->x * IMG_WIDTH, (game->player->y - 1) * IMG_HEIGHT);
-	if (game->map[game->player->y + 1][game->player->x] == '0')
-		ft_cpy_img(game->assests[0]->animations->frames->img,
-				game->bg, game->player->x * IMG_WIDTH, (game->player->y + 1) * IMG_HEIGHT);
-	if (game->map[game->player->y][game->player->x - 1] == '0')
-		ft_cpy_img(game->assests[0]->animations->frames->img,
-				game->bg, (game->player->x - 1) * IMG_WIDTH, game->player->y * IMG_HEIGHT);
-	if (game->map[game->player->y][game->player->x + 1] == '0')
-		ft_cpy_img(game->assests[0]->animations->frames->img,
-				game->bg, (game->player->x + 1)* IMG_WIDTH, game->player->y * IMG_HEIGHT);
+    int	grid_x;
+    int	grid_y;
+	static int flag;
+
+    printf("player x: %d, player y: %d\n", game->player->x_px, game->player->y_px);
+    flag = 0;
+	grid_x = game->player->x_px / IMG_WIDTH;
+    grid_y = game->player->y_px / IMG_HEIGHT;
+    if (!game->player_dir)
+		grid_x++;
+	else if (game->player_dir == 2)
+		grid_y++;
+	if (game->player->y_px == game->player->target_y
+		&& game->player->x_px == game->player->target_x)
+		flag = 1;
+	if (flag)
+	{
+		flag = 0;
+		grid_y++;
+	}
+	printf("grid x: %d, grid y: %d\n", grid_x, grid_y);
+    printf("game->map[grid_y][grid_x]: %c\n", game->map[grid_y][grid_x]);
+    if (game->map[grid_y][grid_x] == '0')
+	{
+		printf("drawn\n");
+        ft_cpy_img(game->assests[0]->animations->frames->img,
+            game->bg, grid_x * IMG_WIDTH, grid_y * IMG_HEIGHT);
+	}
+	ft_cpy_img(game->assests[0]->img, game->bg, game->player->target_x, game->player->target_y);
 }
+
 void	render_player(t_game *game)
 {
 	draw_background(game);
-	ft_cpy_img(game->assests[0]->img, game->bg, game->player->target_x, game->player->target_y);
+	// usleep(100000);
     if (!game->player->current_frame)
         game->player->current_frame = game->player->current_animation->frames;
     ft_cpy_img(game->player->current_frame->img,
             game->bg, game->player->x_px, game->player->y_px);
     game->player->current_frame = game->player->current_frame->next;
 	if (game->player->x_px < game->player->target_x)
-		game->player->x_px += STEP_SIZE;
+		game->player->x_px += STEP_SIZE;	
 	else if (game->player->x_px > game->player->target_x)
 		game->player->x_px -= STEP_SIZE;
 	if (game->player->y_px < game->player->target_y)
@@ -102,14 +119,8 @@ void	move_player(t_game *game, int new_x, int new_y)
 		game->collected++;
 	else if (game->map[new_y][new_x] == 'E' && game->collected == game->collectibles)
 		exit(-1);
-	if (game->player_dir != -1)
-	{
-		game->player->init_x = game->player->x * IMG_WIDTH;
-		game->player->init_y = game->player->y * IMG_HEIGHT;
-	}
 	set_positions(game, new_x, new_y);
     game->moves++;
-	render_player(game);
 }
 
 t_animation *get_animation(t_game *game, int a_idx, int f_idx)
