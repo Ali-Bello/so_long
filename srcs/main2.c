@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:40:21 by aderraj           #+#    #+#             */
-/*   Updated: 2024/06/30 01:03:34 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/07/01 04:18:22 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	main(int ac, char **av)
 	if (game.width > 5000 || game.height > 3000)
 		return (printf("MAP IS TOO BIG\n"));
 	game.win = mlx_new_window(game.mlx, game.width, game.height, "SO LONG");
-	game.collectibles = 7;
+	game.collectibles = 0;
 	game.collected = 0;
 	game.moves = 0;
 	game.move_delay = 0;

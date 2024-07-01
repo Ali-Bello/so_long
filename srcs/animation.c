@@ -26,8 +26,8 @@ void	ft_mlx_pixel_put(t_img *data, int x, int y, int color)
 {
 	char	*dst;
 
-	if (color == (int)0xFF000000)
-		return ;
+	// if (color == (int)0xFF000000)
+	// 	return ;
 	dst = data->img_data + (y * data->line_len + x * (data->bpp / 8));
 	*(unsigned int *)dst = color;
 }
