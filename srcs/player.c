@@ -121,6 +121,8 @@ void set_positions(t_game *game, int new_x, int new_y)
 
 void	move_player(t_game *game, int new_x, int new_y)
 {
+	printf("player->x = %d, player->y = %d\n", game->player->x, game->player->y);
+	printf("map[player->y][player->x] = %c\n", game->map[game->player->y][game->player->x]);
 	if (game->map[new_y][new_x] == '1')
 		return ;
 	else if (game->map[new_y][new_x] == 'C')

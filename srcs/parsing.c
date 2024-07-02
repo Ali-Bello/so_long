@@ -171,16 +171,42 @@ int	path_check(char **map)
 	int			j;
 	char	**dup;
 
-
+	/** duplicate the map **/
+	dup = malloc(sizeof(char *) * (get_height(map) + 1));
 	i = 0;
 	while (map[i])
+	{
+		dup[i] = ft_strdup(map[i]);
 		i++;
-	dup = malloc(sizeof(char *) * (i + 1));
+	}
+	dup[i] = NULL;
+
+	/** get player coordinates **/
+	get_player(dup, &i, &j);
+
+	/** fill the map with DFS **/
+	flood_fill(dup, j, i);
+
+	/** check if the path is valid**/
 	i = 0;
-	ft_memcpy(dup, map, sizeof(char *) * (i + 1));	
-	
+	while (dup[i])
+	{
+		if (!is_border(dup[i]))
+			return (0);
+		i++;
+	}
+
+	/** free the duplicate map **/
+	i = 0;
+	while (dup[i])
+	{
+		free(dup[i]);
+		i++;
+	}
+	free(dup);
 	return (1);
 }
+
 void	map_check(char **map)
 {
 	if (!map)
@@ -197,9 +223,13 @@ void	map_check(char **map)
 		printf("Error\nTHE MAP CONTAINS MORE THAN ONE START POSITION\n");
 	else if (!has_collectible(map))
 		printf("Error\nTHE MAP CONTAINS NO COLLECTIBLE\n");
-	else if ()
+	else if (!path_check(map))
+		printf("Error\nTHE MAP CONTAINS NO PATH TO THE EXIT\n");
 	else
-		return (printf("MAP IS VALID\n"));
+	{
+		printf("MAP IS VALID\n");
+		return ;
+	}
 	exit(-1);
 }
 

@@ -6,11 +6,11 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 13:55:25 by aderraj           #+#    #+#             */
-/*   Updated: 2024/05/05 22:14:46 by aderraj          ###   ########.fr       */
+/*   Updated: 2023/11/18 03:53:40 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/libft.h"
+#include "libft.h"
 
 char	*ft_strdup(const char *s1)
 {
