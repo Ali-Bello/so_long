@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 00:51:48 by aderraj           #+#    #+#             */
-/*   Updated: 2024/05/06 01:30:48 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/07/02 02:04:24 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,56 @@ int	is_valid_chars(char **map)
 	}
 	return (1);
 }
+void	flood_fill(char **map, int x, int y)
+{
+  if (map[y][x] == '1')
+    return;
+  map[y][x] = '1';
+  flood_fill(map, x + 1, y);
+  flood_fill(map, x, y + 1);
+  flood_fill(map, x - 1, y);
+  flood_fill(map, x, y - 1);
+}
+
+void	get_player(char	**map, int *y, int *x)
+{
+	int			i;
+	int			j;
+
+	i = 0;
+	while (map[i])
+	{
+		j = 0;
+		while (map[i][j])
+		{
+			if (map[i][j] == 'P')
+				break;
+			j++;
+		}
+		if (map[i][j] == 'P')
+				break;
+		i++;
+	}
+	*y = i;
+	*x = j;
+}
+
+int	path_check(char **map)
+{
+	int			i;
+	int			j;
+	char	**dup;
+
+
+	i = 0;
+	while (map[i])
+		i++;
+	dup = malloc(sizeof(char *) * (i + 1));
+	i = 0;
+	ft_memcpy(dup, map, sizeof(char *) * (i + 1));	
+	
+	return (1);
+}
 void	map_check(char **map)
 {
 	if (!map)
@@ -147,11 +197,9 @@ void	map_check(char **map)
 		printf("Error\nTHE MAP CONTAINS MORE THAN ONE START POSITION\n");
 	else if (!has_collectible(map))
 		printf("Error\nTHE MAP CONTAINS NO COLLECTIBLE\n");
+	else if ()
 	else
-	{
-		printf("MAP IS VALID\n");
-		return ;
-	}
+		return (printf("MAP IS VALID\n"));
 	exit(-1);
 }
 
