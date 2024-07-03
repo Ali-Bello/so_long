@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 23:42:47 by aderraj           #+#    #+#             */
-/*   Updated: 2024/07/02 00:25:37 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/07/02 22:56:17 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,11 @@ typedef struct s_game
 	int			moves;
 	int			move_delay;
 	int			player_dir;
+	int			exit_x;
+	int			exit_y;
 }	t_game;
 
+void		get_position(char c, char **map, int *y, int *x);
 int			get_height(char **map);
 void		ft_cpy_pixel(t_img *src, t_img *dst, int src_idx, int dst_idx);
 void		ft_cpy_img(t_img *src, t_img *dst, int x, int y);

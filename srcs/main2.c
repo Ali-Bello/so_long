@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:40:21 by aderraj           #+#    #+#             */
-/*   Updated: 2024/07/01 04:45:06 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/07/02 22:56:36 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ int	main(int ac, char **av)
 	game.moves = 0;
 	game.move_delay = 0;
 	game.player_dir = -1;
+	get_position('E', game.map, &game.exit_y, &game.exit_x);
 	/********************************/
 	/**ASSESTS*/
 	game.assests = malloc(sizeof(t_sprite *) * 6);

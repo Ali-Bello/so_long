@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 02:05:17 by aderraj           #+#    #+#             */
-/*   Updated: 2024/07/01 04:26:38 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/07/02 23:03:24 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void draw_background(t_game *game)
 {
     static int prev_grid_x = -1, prev_grid_y = -1;
     int grid_x = game->player->x_px / IMG_WIDTH, grid_y = game->player->y_px / IMG_HEIGHT;
-
     int min_x = fmax(fmin(prev_grid_x, grid_x) - 1, 0);
     int max_x = fmin(fmax(prev_grid_x, grid_x) + 1, game->width / IMG_WIDTH - 1);
     int min_y = fmax(fmin(prev_grid_y, grid_y) - 1, 0);
@@ -55,7 +54,7 @@ void draw_background(t_game *game)
     for (int y = min_y; y <= max_y; y++) {
         for (int x = min_x; x <= max_x; x++) {
             int assetIndex = 0;
-            if (game->map[y][x] == 'E') 
+            if (y == game->exit_y && x == game->exit_x) 
             {
 				assetIndex = 3;
 				ft_cpy_img(game->assests[0]->img, game->bg, x * IMG_WIDTH, y * IMG_HEIGHT);
@@ -95,9 +94,14 @@ void	render_player(t_game *game)
 		game->player_dir = -1;
 }
 
-void set_positions(t_game *game, int new_x, int new_y)
+
+void	move_player(t_game *game, int new_x, int new_y)
 {
-    if (game->player->x > new_x)
+	if (game->map[new_y][new_x] == '1')
+		return ;
+	else if (game->map[new_y][new_x] == 'C')
+		game->collected++;
+	if (game->player->x > new_x)
         game->player_dir = 0;
     else if (game->player->x < new_x)
         game->player_dir = 1;
@@ -107,27 +111,10 @@ void set_positions(t_game *game, int new_x, int new_y)
 		game->player_dir = 3;
 	game->player->target_y = new_y * IMG_WIDTH;
     game->player->target_x = new_x * IMG_WIDTH;
-	if (game->map[new_y][new_x] == 'E')
-		game->map[new_y][new_x] = 'E';
-	else
-		game->map[new_y][new_x] = 'P';
-    if (game->map[game->player->y][game->player->x] == 'E')
-		game->map[game->player->y][game->player->x] = 'E';
-	else
-		game->map[game->player->y][game->player->x] = '0';	
+	game->map[new_y][new_x] = 'P';
+	game->map[game->player->y][game->player->x] = '0';	
 	game->player->x = new_x;
 	game->player->y = new_y; 
-}
-
-void	move_player(t_game *game, int new_x, int new_y)
-{
-	printf("player->x = %d, player->y = %d\n", game->player->x, game->player->y);
-	printf("map[player->y][player->x] = %c\n", game->map[game->player->y][game->player->x]);
-	if (game->map[new_y][new_x] == '1')
-		return ;
-	else if (game->map[new_y][new_x] == 'C')
-		game->collected++;
-	set_positions(game, new_x, new_y);
     game->moves++;
 }
 
@@ -158,10 +145,16 @@ int	update_player(t_game *game)
 		game->player->current_animation = get_animation(game, 4, 1);
 	else
 		game->player->current_animation = game->assests[4]->animations;
+	if (game->player->x_px == game->exit_x * IMG_WIDTH
+		&& game->player->y_px == game->exit_y * IMG_HEIGHT
+		&& game->collected == game->collectibles
+		&& game->player_dir == -1)
+	{
+		printf("You won!\n");
+		exit(0);
+	}
 	render_player(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->bg->img_ptr, 0, 0);
-	if (game->map[game->player->y_px / IMG_WIDTH][game->player->x_px / IMG_HEIGHT] == 'E' && game->collected == game->collectibles)
-		exit(-1);
 	usleep(16670);
 	return (0);
 }

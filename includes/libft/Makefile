@@ -5,7 +5,7 @@ CC = cc
 CFLAGS = -Werror -Wextra -Wall
 
 SRCS = ft_putstr_fd.c ft_strncmp.c ft_split.c ft_strlen.c\
-	ft_strjoin.c ft_substr.c ft_strdup.c ft_memcpy.c\
+	ft_strjoin.c ft_substr.c ft_strdup.c ft_memcpy.c ft_strchr.c\
 
 OBJS = $(SRCS:.c=.o)
 

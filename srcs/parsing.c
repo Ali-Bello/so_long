@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 00:51:48 by aderraj           #+#    #+#             */
-/*   Updated: 2024/07/02 02:04:24 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/07/03 00:00:10 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int	is_enclosed(char **map)
 	return (1);
 }
 
-int	is_valid_chars(char **map)
+int	is_valid_chars(char **map, char *charset)
 {
 	int	i;
 	int	j;
@@ -122,8 +122,7 @@ int	is_valid_chars(char **map)
 		j = 0;
 		while (map[i][j])
 		{
-			if (map[i][j] != '1' && map[i][j] != '0' && map[i][j] != 'E'
-				&& map[i][j] != 'P' && map[i][j] != 'C')
+			if (!ft_strchr(charset, map[i][j]))
 				return (0);
 			j++;
 		}
@@ -142,7 +141,7 @@ void	flood_fill(char **map, int x, int y)
   flood_fill(map, x, y - 1);
 }
 
-void	get_player(char	**map, int *y, int *x)
+void	get_position(char c, char **map, int *y, int *x)
 {
 	int			i;
 	int			j;
@@ -153,11 +152,11 @@ void	get_player(char	**map, int *y, int *x)
 		j = 0;
 		while (map[i][j])
 		{
-			if (map[i][j] == 'P')
+			if (map[i][j] == c)
 				break;
 			j++;
 		}
-		if (map[i][j] == 'P')
+		if (map[i][j] == c)
 				break;
 		i++;
 	}
@@ -182,7 +181,7 @@ int	path_check(char **map)
 	dup[i] = NULL;
 
 	/** get player coordinates **/
-	get_player(dup, &i, &j);
+	get_position('P', dup, &i, &j);
 
 	/** fill the map with DFS **/
 	flood_fill(dup, j, i);
@@ -191,7 +190,7 @@ int	path_check(char **map)
 	i = 0;
 	while (dup[i])
 	{
-		if (!is_border(dup[i]))
+		if (!is_valid_chars(dup, "01"))
 			return (0);
 		i++;
 	}
@@ -211,7 +210,7 @@ void	map_check(char **map)
 {
 	if (!map)
 		return ;
-	if (!is_valid_chars(map))
+	if (!is_valid_chars(map, "01CEP"))
 		printf("Error\nTHE MAP CONTAINS INVALID CHARACTERS\n");
 	else if (!is_enclosed(map))
 		printf("Error\nTHE MAP IS NOT ENCLOSED WITH WALLS\n");
