@@ -123,7 +123,9 @@ int	is_valid_chars(char **map, char *charset)
 		while (map[i][j])
 		{
 			if (!ft_strchr(charset, map[i][j]))
+			{
 				return (0);
+			}
 			j++;
 		}
 		i++;
@@ -246,6 +248,8 @@ int	new_line_check(char *str)
 	return (1);
 }
 
+#include <string.h>
+
 char	**get_map(int fd)
 {
 	char	**map;
@@ -263,7 +267,7 @@ char	**get_map(int fd)
 			if (buffer)
 				free(buffer);
 			free(line);
-			printf("Error\nMAP CONTAINS INVALID CHARS\n");
+			printf("Error\nMAP CONTAINS EXTRA NEW_LINESn");
 			exit(-1);
 		}
 		buffer = ft_strjoin(buffer, line);
