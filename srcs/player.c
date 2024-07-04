@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 02:05:17 by aderraj           #+#    #+#             */
-/*   Updated: 2024/07/02 23:03:24 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/07/04 14:40:27 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ void	render_player(t_game *game)
 		game->player_dir = -1;
 }
 
-
 void	move_player(t_game *game, int new_x, int new_y)
 {
 	if (game->map[new_y][new_x] == '1')
@@ -153,6 +152,7 @@ int	update_player(t_game *game)
 		printf("You won!\n");
 		exit(0);
 	}
+	
 	render_player(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->bg->img_ptr, 0, 0);
 	usleep(16670);

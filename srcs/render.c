@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 15:39:30 by aderraj           #+#    #+#             */
-/*   Updated: 2024/07/01 03:51:59 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/07/04 14:20:38 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void	set_asset(t_game *game, char c, int x, int y)
 		tmp = game->assests[2];
 	else if (c == 'E')
 		tmp = game->assests[3];
+	else if (c == 'X')
+		tmp = game->assests[5];	
 	if (tmp)
 	{
 		ft_cpy_img(tmp->animations->current_frame->img, game->bg, x, y);

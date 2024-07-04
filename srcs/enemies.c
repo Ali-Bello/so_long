@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 00:38:23 by aderraj           #+#    #+#             */
-/*   Updated: 2024/07/03 01:10:24 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/07/04 13:14:28 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,14 @@ void    spawn_enemies(t_game *game)
         }
         i++;
     }
-        if (count == 0) {
-        printf("No zeroes to replace\n");
+    if (count == 0 || i == 3)
         return;
-    }
-
     // Seed the random number generator
-    srand(time(NULL));
+    srand(time(NULL));  
 
     // Select a random position from the list of zero positions
     int random_index = rand() % count;
-    int row = available_positions[random_index][0];
-    int col = available_positions[random_index][1];
-
     // Replace '0' with 'X' at the selected position
-    game->map[row][col] = 'X';
+    game->map[(int)available_positions[random_index][0]]
+            [(int)available_positions[random_index][1]] = 'X';
 }

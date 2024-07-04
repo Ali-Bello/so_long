@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 00:16:06 by aderraj           #+#    #+#             */
-/*   Updated: 2024/05/05 23:13:25 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/07/04 13:05:16 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static char	**fill(char **ptr, const char *s, char c)
 			i++;
 		if (i > flag)
 		{
-			ptr[j] = ft_substr(s, flag, i - flag - 1);
+			ptr[j] = ft_substr(s, flag, i - flag);
 			if (ptr[j] == NULL)
 				return (free_all(ptr));
 			j++;

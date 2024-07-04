@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:40:21 by aderraj           #+#    #+#             */
-/*   Updated: 2024/07/02 22:56:36 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/07/04 14:28:40 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@ void	load_assests(t_game *game)
 	game->assests[4] = new_sprite("textures/Player_64.xpm", game->mlx,
 			game->win);
 	load_animations(game->assests[4], 24);
+	game->assests[5] = new_sprite("textures/enemy.xpm", game->mlx,
+			game->win);
+	load_animations(game->assests[5], 1);
 }
 
 int	apply_moves(int keycode, t_game *game)
@@ -89,8 +92,8 @@ int	main(int ac, char **av)
 		printf("[%s]\n", game.map[i]);
 	/********************************/
 	/**ASSESTS*/
-	game.assests = malloc(sizeof(t_sprite *) * 6);
-	game.assests[5] = NULL;
+	game.assests = malloc(sizeof(t_sprite *) * 7);
+	game.assests[6] = NULL;
 	load_assests(&game);
 	/**********/
 	/*BACKGROUND IMG*/
