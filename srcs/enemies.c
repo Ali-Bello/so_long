@@ -39,4 +39,19 @@ void    spawn_enemies(t_game *game)
         }
         i++;
     }
+        if (count == 0) {
+        printf("No zeroes to replace\n");
+        return;
+    }
+
+    // Seed the random number generator
+    srand(time(NULL));
+
+    // Select a random position from the list of zero positions
+    int random_index = rand() % count;
+    int row = available_positions[random_index][0];
+    int col = available_positions[random_index][1];
+
+    // Replace '0' with 'X' at the selected position
+    game->map[row][col] = 'X';
 }

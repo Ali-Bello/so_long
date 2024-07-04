@@ -84,6 +84,9 @@ int	main(int ac, char **av)
 	game.move_delay = 0;
 	game.player_dir = -1;
 	get_position('E', game.map, &game.exit_y, &game.exit_x);
+	spawn_enemies(&game);
+	for (int i = 0; game.map[i]; i++)
+		printf("[%s]\n", game.map[i]);
 	/********************************/
 	/**ASSESTS*/
 	game.assests = malloc(sizeof(t_sprite *) * 6);

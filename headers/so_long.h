@@ -120,5 +120,5 @@ char 		**get_map(int fd);
 t_sprite 	*new_sprite(char *filename, void *mlx, void *win);
 void		load_animations(t_sprite *sprite, int n);
 void		get_player_mapxy(t_game *game);
-
+void		spawn_enemies(t_game *game);
 #endif
