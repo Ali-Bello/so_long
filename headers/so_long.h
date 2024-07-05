@@ -97,6 +97,7 @@ typedef struct s_enemy
 	int	y_px;
 	int target_x;
 	int target_y;
+	int	is_moving;
 } t_enemy;
 
 typedef struct s_game
@@ -104,7 +105,9 @@ typedef struct s_game
 	t_sprite	**assests;
 	t_img		*bg;
 	t_player	*player;
+	t_enemy		*enemy;
 	char		**map;
+	char		**available_positions;
 	void		*mlx;
 	void		*win;
 	int			width;
@@ -131,5 +134,6 @@ char 		**get_map(int fd);
 t_sprite 	*new_sprite(char *filename, void *mlx, void *win);
 void		load_animations(t_sprite *sprite, int n);
 void		get_player_mapxy(t_game *game);
-void		spawn_enemies(t_game *game);
+void		spawn_enemy(t_game *game);
+void		render_enemy(t_game *game);
 #endif

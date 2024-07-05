@@ -15,7 +15,7 @@
 #define map_height game->height / IMG_HEIGHT
 #define map_width game->width / IMG_WIDTH
 
-void    spawn_enemies(t_game *game)
+void    spawn_enemy(t_game *game)
 {
     char    available_positions[map_height * map_width][2];
     int     count;
@@ -42,8 +42,7 @@ void    spawn_enemies(t_game *game)
     if (count == 0 || i == 3)
         return;
     // Seed the random number generator
-    srand(time(NULL));  
-
+    srand(time(NULL)); 
     // Select a random position from the list of zero positions
     int random_index = rand() % count;
     // Replace '0' with 'X' at the selected position

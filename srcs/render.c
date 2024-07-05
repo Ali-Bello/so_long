@@ -60,8 +60,6 @@ void	set_asset(t_game *game, char c, int x, int y)
 		tmp = game->assests[2];
 	else if (c == 'E')
 		tmp = game->assests[3];
-	else if (c == 'X')
-		tmp = game->assests[5];	
 	if (tmp)
 	{
 		ft_cpy_img(tmp->animations->current_frame->img, game->bg, x, y);

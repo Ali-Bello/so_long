@@ -59,6 +59,8 @@ void draw_background(t_game *game)
 				assetIndex = 3;
 				ft_cpy_img(game->assests[0]->img, game->bg, x * IMG_WIDTH, y * IMG_HEIGHT);
 			}
+			else if (y == game->enemy->y && x == game->enemy->x)
+				continue;
 			else if (game->map[y][x] == '1') assetIndex = 1;
 			else if (game->map[y][x] == 'C')
 			{
@@ -76,6 +78,7 @@ void draw_background(t_game *game)
 void	render_player(t_game *game)
 {
 	draw_background(game);
+	render_enemy(game);
     if (!game->player->current_frame)
         game->player->current_frame = game->player->current_animation->frames;
     ft_cpy_img(game->player->current_frame->img,
@@ -132,6 +135,100 @@ t_animation *get_animation(t_game *game, int a_idx, int f_idx)
 	return (tmp);
 }
 
+void draw_enemy_background(t_game *game)
+{
+    static int prev_grid_x = -1, prev_grid_y = -1;
+    int grid_x = game->enemy->x_px / IMG_WIDTH, grid_y = game->enemy->y_px / IMG_HEIGHT;
+    int min_x = fmax(fmin(prev_grid_x, grid_x) - 1, 0);
+    int max_x = fmin(fmax(prev_grid_x, grid_x) + 1, game->width / IMG_WIDTH - 1);
+    int min_y = fmax(fmin(prev_grid_y, grid_y) - 1, 0);
+    int max_y = fmin(fmax(prev_grid_y, grid_y) + 1, game->height / IMG_HEIGHT - 1);
+
+    for (int y = min_y; y <= max_y; y++) {
+        for (int x = min_x; x <= max_x; x++) {
+            int assetIndex = 0;
+            if (y == game->exit_y && x == game->exit_x) 
+            {
+				assetIndex = 3;
+				ft_cpy_img(game->assests[0]->img, game->bg, x * IMG_WIDTH, y * IMG_HEIGHT);
+			}
+			// else if (y == game->player->y && x == game->player->x)
+			// 	continue;
+			else if (game->map[y][x] == '1') assetIndex = 1;
+			else if (game->map[y][x] == 'C')
+			{
+				ft_cpy_img(game->assests[0]->img, game->bg, x * IMG_WIDTH, y * IMG_HEIGHT);
+				assetIndex = 2;
+			}
+            ft_cpy_img(game->assests[assetIndex]->animations->frames->img, game->bg, x * IMG_WIDTH, y * IMG_HEIGHT);
+        }
+    }
+    prev_grid_x = grid_x;
+    prev_grid_y = grid_y;
+}
+
+void	render_enemy(t_game *game)
+{
+	if (!game->enemy->current_animation->current_frame)
+		game->enemy->current_animation->current_frame = game->enemy->current_animation->frames;
+	if (game->enemy->current_animation->delay_counter < 5)
+	{
+		game->enemy->current_animation->delay_counter++;
+		return ;
+	}
+	game->enemy->current_animation->delay_counter = 0;
+	draw_enemy_background(game);
+	ft_cpy_img(game->enemy->current_animation->current_frame->img,
+			game->bg, game->enemy->x_px, game->enemy->y_px);
+	game->enemy->current_animation->current_frame = game->enemy->current_animation->current_frame->next;
+	if (game->enemy->x_px < game->enemy->target_x)
+		game->enemy->x_px += 8;	
+	else if (game->enemy->x_px > game->enemy->target_x)
+		game->enemy->x_px -= 8;
+	if (game->enemy->y_px < game->enemy->target_y)
+		game->enemy->y_px += 8;
+	else if (game->enemy->y_px > game->enemy->target_y)
+		game->enemy->y_px -= 8;
+	if ((game->enemy->x_px == game->enemy->target_x
+		&& game->enemy->y_px == game->enemy->target_y)
+		|| game->map[game->enemy->y_px / IMG_HEIGHT][game->enemy->x_px / IMG_WIDTH] == '1')
+		game->enemy->is_moving = 0;
+}
+
+void move_enemy(t_game *game)
+{
+	int map_height = get_height(game->map);
+	int map_width = ft_strlen(game->map[0]);
+    char available_positions[get_height(game->map) * ft_strlen(game->map[0])][2];
+    int count = 0;
+    int i, j;
+
+    // Collect available positions
+    for (i = 0; i < map_height; i++) {
+        for (j = 0; j < map_width; j++) {
+            if (game->map[i][j] == '0') { // Assuming '0' is an empty space
+                available_positions[count][0] = i;
+                available_positions[count][1] = j;
+                count++;
+            }
+        }
+    }
+    if (count > 0 && !game->enemy->is_moving) {
+		for (int i = 0; game->map[i]; i++)
+			printf("[%s]\n", game->map[i]);
+        srand(time(NULL)); // Seed the random number generator
+        int random_index = rand() % count; // Select a random position
+        // Convert selected position back to game coordinates
+        game->enemy->target_x = available_positions[random_index][1] * IMG_WIDTH;
+        game->enemy->target_y = available_positions[random_index][0] * IMG_HEIGHT;
+		game->map[game->enemy->y][game->enemy->x] = '0';
+		game->enemy->x = game->enemy->target_x / IMG_WIDTH;
+		game->enemy->y = game->enemy->target_y / IMG_HEIGHT;
+		game->map[game->enemy->y][game->enemy->x] = 'X';
+		game->enemy->is_moving = 1;
+    }
+}
+
 int	update_player(t_game *game)
 {
 	if (!game->player_dir)
@@ -152,8 +249,14 @@ int	update_player(t_game *game)
 		printf("You won!\n");
 		exit(0);
 	}
-	
+	else if (game->player->x_px == game->enemy->x_px
+		&& game->player->y_px == game->enemy->y_px)
+	{
+		printf("You lost!\n");
+		exit(0);
+	}
 	render_player(game);
+	move_enemy(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->bg->img_ptr, 0, 0);
 	usleep(16670);
 	return (0);

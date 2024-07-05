@@ -86,16 +86,18 @@ int	main(int ac, char **av)
 	game.moves = 0;
 	game.move_delay = 0;
 	game.player_dir = -1;
+	game.available_positions = malloc(sizeof(char *) * (game.height / IMG_HEIGHT));
+	for (int i = 0; i < game.height / IMG_HEIGHT; i++)
+		game.available_positions[i] = malloc(sizeof(char) * (game.width / IMG_WIDTH));
 	get_position('E', game.map, &game.exit_y, &game.exit_x);
-	spawn_enemies(&game);
-	for (int i = 0; game.map[i]; i++)
-		printf("[%s]\n", game.map[i]);
 	/********************************/
+
 	/**ASSESTS*/
 	game.assests = malloc(sizeof(t_sprite *) * 7);
 	game.assests[6] = NULL;
 	load_assests(&game);
 	/**********/
+
 	/*BACKGROUND IMG*/
 	game.bg = malloc(sizeof(t_img));
 	if (!game.bg)
@@ -108,13 +110,29 @@ int	main(int ac, char **av)
 	game.bg->img_data = mlx_get_data_addr(game.bg->img_ptr, &game.bg->bpp,
 			&game.bg->line_len, &game.bg->endian);
 	/***************/
-	
+
 	/**PLAYER*/
 	game.player = malloc(sizeof(t_player));
 	*(game.player) = (t_player){game.assests[4]->animations, NULL, 0, 0, 0, 0, 0, 0,
 		0, 0, 0};
 	get_player_mapxy(&game);
 	/*********/
+
+	/**ENEMY**/
+	game.enemy = malloc(sizeof(t_enemy));
+	if (!game.enemy)
+		return (free(game.map), 0);
+	*(game.enemy) = (t_enemy){game.assests[5]->animations, 0, 0, 0, 0, 0, 0, 0};
+	spawn_enemy(&game);
+	get_position('X', game.map, &game.enemy->y, &game.enemy->x);
+	game.enemy->x_px = game.enemy->x * IMG_WIDTH;
+	game.enemy->y_px = game.enemy->y * IMG_HEIGHT;
+	game.enemy->target_x = game.enemy->x_px;
+	game.enemy->target_y = game.enemy->y_px;
+	for (int i = 0; game.map[i]; i++)
+		printf("[%s]\n", game.map[i]);
+	/********/
+
 	render_map(&game);
 	mlx_key_hook(game.win, apply_moves, &game);
 	mlx_loop_hook(game.mlx, update_player, &game);
