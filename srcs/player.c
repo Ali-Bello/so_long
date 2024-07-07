@@ -59,8 +59,7 @@ void draw_background(t_game *game)
 				assetIndex = 3;
 				ft_cpy_img(game->assests[0]->img, game->bg, x * IMG_WIDTH, y * IMG_HEIGHT);
 			}
-			else if (y == game->enemy->y && x == game->enemy->x)
-				continue;
+			// else if (y == game->player->y && x == game->player->x)
 			else if (game->map[y][x] == '1') assetIndex = 1;
 			else if (game->map[y][x] == 'C')
 			{
@@ -167,67 +166,78 @@ void draw_enemy_background(t_game *game)
     prev_grid_y = grid_y;
 }
 
-void	render_enemy(t_game *game)
-{
-	if (!game->enemy->current_animation->current_frame)
-		game->enemy->current_animation->current_frame = game->enemy->current_animation->frames;
-	if (game->enemy->current_animation->delay_counter < 5)
-	{
-		game->enemy->current_animation->delay_counter++;
-		return ;
-	}
-	game->enemy->current_animation->delay_counter = 0;
-	draw_enemy_background(game);
-	ft_cpy_img(game->enemy->current_animation->current_frame->img,
-			game->bg, game->enemy->x_px, game->enemy->y_px);
-	game->enemy->current_animation->current_frame = game->enemy->current_animation->current_frame->next;
-	if (game->enemy->x_px < game->enemy->target_x)
-		game->enemy->x_px += 8;	
-	else if (game->enemy->x_px > game->enemy->target_x)
-		game->enemy->x_px -= 8;
-	if (game->enemy->y_px < game->enemy->target_y)
-		game->enemy->y_px += 8;
-	else if (game->enemy->y_px > game->enemy->target_y)
-		game->enemy->y_px -= 8;
-	if ((game->enemy->x_px == game->enemy->target_x
-		&& game->enemy->y_px == game->enemy->target_y)
-		|| game->map[game->enemy->y_px / IMG_HEIGHT][game->enemy->x_px / IMG_WIDTH] == '1')
-		game->enemy->is_moving = 0;
+void set_enemy_target(t_game *game) {
+    int new_x, new_y;
+
+    do {
+        new_x = rand() % (game->width / IMG_WIDTH);
+        new_y = rand() % (game->height / IMG_HEIGHT);
+    } while (game->map[new_y][new_x] == '1'); // Ensure the new position is not a wall
+
+    game->enemy->target_x = new_x * IMG_WIDTH;
+    game->enemy->target_y = new_y * IMG_HEIGHT;
 }
 
-void move_enemy(t_game *game)
-{
-	int map_height = get_height(game->map);
-	int map_width = ft_strlen(game->map[0]);
-    char available_positions[get_height(game->map) * ft_strlen(game->map[0])][2];
-    int count = 0;
-    int i, j;
+int is_valid_position(t_game *game, int x, int y) {
+    return x >= 0 && x < game->width / IMG_WIDTH &&
+           y >= 0 && y < game->height / IMG_HEIGHT &&
+           game->map[y][x] != '1';
+}
 
-    // Collect available positions
-    for (i = 0; i < map_height; i++) {
-        for (j = 0; j < map_width; j++) {
-            if (game->map[i][j] == '0') { // Assuming '0' is an empty space
-                available_positions[count][0] = i;
-                available_positions[count][1] = j;
-                count++;
-            }
-        }
+void move_enemy(t_game *game) {
+    // Check if enemy has reached its target
+    if (game->enemy->x_px == game->enemy->target_x && 
+        game->enemy->y_px == game->enemy->target_y) 
+    {
+        set_enemy_target(game); // Set a new target position
     }
-    if (count > 0 && !game->enemy->is_moving) {
-		for (int i = 0; game->map[i]; i++)
-			printf("[%s]\n", game->map[i]);
-        srand(time(NULL)); // Seed the random number generator
-        int random_index = rand() % count; // Select a random position
-        // Convert selected position back to game coordinates
-        game->enemy->target_x = available_positions[random_index][1] * IMG_WIDTH;
-        game->enemy->target_y = available_positions[random_index][0] * IMG_HEIGHT;
-		game->map[game->enemy->y][game->enemy->x] = '0';
-		game->enemy->x = game->enemy->target_x / IMG_WIDTH;
-		game->enemy->y = game->enemy->target_y / IMG_HEIGHT;
-		game->map[game->enemy->y][game->enemy->x] = 'X';
-		game->enemy->is_moving = 1;
+
+    // Determine the next step towards the target
+    int next_x = game->enemy->x_px;
+    int next_y = game->enemy->y_px;
+
+    if (game->enemy->x_px < game->enemy->target_x)
+        next_x += STEP_SIZE;
+    else if (game->enemy->x_px > game->enemy->target_x)
+        next_x -= STEP_SIZE;
+
+    if (game->enemy->y_px < game->enemy->target_y)
+        next_y += STEP_SIZE;
+    else if (game->enemy->y_px > game->enemy->target_y)
+        next_y -= STEP_SIZE;
+
+    // Calculate grid positions
+    int grid_x = next_x / IMG_WIDTH;
+    int grid_y = next_y / IMG_HEIGHT;
+
+    // Move enemy step by step towards the target if the next position is valid
+    if (is_valid_position(game, grid_x, grid_y)) {
+        game->enemy->x_px = next_x;
+        game->enemy->y_px = next_y;
+        game->enemy->x = grid_x;
+        game->enemy->y = grid_y;
+    } else {
+        // If the next step is blocked, set a new target
+        set_enemy_target(game);
     }
 }
+
+void render_enemy(t_game *game) {
+    move_enemy(game);
+
+    if (!game->enemy->current_animation->current_frame)
+        game->enemy->current_animation->current_frame = game->enemy->current_animation->frames;
+    if (game->enemy->current_animation->delay_counter < 5) {
+        game->enemy->current_animation->delay_counter++;
+        return;
+    }
+    game->enemy->current_animation->delay_counter = 0;
+    draw_enemy_background(game);
+    ft_cpy_img(game->enemy->current_animation->current_frame->img, game->bg,
+               game->enemy->x_px, game->enemy->y_px);
+    game->enemy->current_animation->current_frame = game->enemy->current_animation->current_frame->next;
+}
+
 
 int	update_player(t_game *game)
 {
@@ -256,7 +266,6 @@ int	update_player(t_game *game)
 		exit(0);
 	}
 	render_player(game);
-	move_enemy(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->bg->img_ptr, 0, 0);
 	usleep(16670);
 	return (0);

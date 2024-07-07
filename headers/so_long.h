@@ -98,6 +98,7 @@ typedef struct s_enemy
 	int target_x;
 	int target_y;
 	int	is_moving;
+	int	move_progress;
 } t_enemy;
 
 typedef struct s_game

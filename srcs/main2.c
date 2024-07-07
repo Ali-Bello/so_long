@@ -122,15 +122,14 @@ int	main(int ac, char **av)
 	game.enemy = malloc(sizeof(t_enemy));
 	if (!game.enemy)
 		return (free(game.map), 0);
-	*(game.enemy) = (t_enemy){game.assests[5]->animations, 0, 0, 0, 0, 0, 0, 0};
+	*(game.enemy) = (t_enemy){game.assests[5]->animations, 0, 0, 0, 0, 0, 0, 0, 0};
 	spawn_enemy(&game);
+	srand(time(NULL));
 	get_position('X', game.map, &game.enemy->y, &game.enemy->x);
 	game.enemy->x_px = game.enemy->x * IMG_WIDTH;
 	game.enemy->y_px = game.enemy->y * IMG_HEIGHT;
 	game.enemy->target_x = game.enemy->x_px;
 	game.enemy->target_y = game.enemy->y_px;
-	for (int i = 0; game.map[i]; i++)
-		printf("[%s]\n", game.map[i]);
 	/********/
 
 	render_map(&game);
