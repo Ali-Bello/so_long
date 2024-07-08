@@ -12,15 +12,14 @@
 
 #include "so_long.h"
 
-
 int main(int ac, char **av)
 {
     t_game  game;
 
     if (ac != 2)
         return (0);
-    game.map = read_map(av[1], &game);
-    game_allocs(&game);
+    game_init(&game, av[1]);
     if (error_prompts(game.error_code))
         return (0);
+    render_map(&game);
 }

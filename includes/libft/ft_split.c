@@ -62,7 +62,7 @@ static char	**fill(char **ptr, const char *s, char c)
 			i++;
 		if (i > flag)
 		{
-			ptr[j] = ft_substr(s, flag, i - flag);
+			ptr[j] = ft_substr(s, flag, i - flag - 1);
 			if (ptr[j] == NULL)
 				return (free_all(ptr));
 			j++;

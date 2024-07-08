@@ -22,6 +22,8 @@
 #include <math.h>
 #include <time.h>
 
+#define TILE_SIZE 64
+
 typedef struct s_img
 {
     void    *img_ptr;
@@ -39,7 +41,6 @@ typedef struct s_character
     int y;
     int target_x;
     int target_y;
-    int step;
     int direction;
 }   t_character;
 
@@ -65,6 +66,9 @@ typedef struct s_game
 
 int game_allocs(t_game *game);
 int error_prompts(t_game *game);
+int load_assets(t_game *game);
+void    game_init(t_game *game, char *path);
+void    spawn_enemy(t_game *game);
 
 /**PARSING**/
 int read_map(char *path, t_game *game);
@@ -74,4 +78,7 @@ void	get_position(char c, char **map, int *y, int *x);
 void    flood_fill(char **map, int x, int y);
 /**********/
 
+/**RENDER**/
+void    render_map(t_game *game);
+/*********/
 #endif

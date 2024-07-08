@@ -46,5 +46,15 @@ int error_prompts(t_game *game)
         return (ft_putstr_fd("Error\n--> [malloc error]\n", 1), 1);
     else if (game->error_code > 1 && game->error_code < 11)
         return (map_errors(game), 1);
+    else if (game->error_code == 11)
+        return (ft_putstr_fd("Error\nMLX: --> [failed to init connection]\n", 1), 1);
+    else if (game->error_code == 12)
+        return (ft_putstr_fd("Error\nMLX: --> [failed to create new window]\n", 1), 1);
+    else if (game->error_code == 13)
+        return (ft_putstr_fd("Error\nMLX: --> [failed to create new image]\n", 1), 1);
+    else if (game->error_code == 14)
+        return (ft_putstr_fd("Error\nMLX: --> [failed to fetsh data from image]\n", 1), 1);
+    else if (game->error_code == 15)
+        return (ft_putstr_fd("Error\nMLX: --> [failed to read xpm file]\n", 1), 1);
     return (0);
 }
