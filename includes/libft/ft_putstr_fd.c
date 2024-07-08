@@ -17,11 +17,3 @@ void	ft_putstr_fd(char *s, int fd)
 	if (s)
 		write(fd, s, ft_strlen(s));
 }
-void	ft_lstiter(t_list *lst, void (*f)(void *))
-{
-	while (lst && f)
-	{
-		f(lst->content);
-		lst = lst->next;
-	}
-}

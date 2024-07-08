@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   so_long.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/02 13:55:25 by aderraj           #+#    #+#             */
-/*   Updated: 2024/07/02 22:27:41 by aderraj          ###   ########.fr       */
+/*   Created: 2024/07/08 02:44:16 by marvin            #+#    #+#             */
+/*   Updated: 2024/07/08 02:44:16 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/libft.h"
+#include "so_long.h"
 
-char	*ft_strdup(const char *s1)
+
+int main(int ac, char **av)
 {
-	char	*ptr;
-	size_t	len;
+    t_game  game;
 
-	len = ft_strlen(s1) + 1;
-	ptr = malloc(len * sizeof(char));
-	if (!ptr)
-		return (NULL);
-	return ((char *)ft_memcpy(ptr, s1, len));
+    if (ac != 2)
+        return (0);
+    game.map = read_map(av[1], &game);
+    game_allocs(&game);
+    if (error_prompts(game.error_code))
+        return (0);
 }

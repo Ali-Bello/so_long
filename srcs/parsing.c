@@ -166,13 +166,11 @@ void	get_position(char c, char **map, int *y, int *x)
 	*x = j;
 }
 
-int	path_check(char **map)
+char	**duplicate_map(char **map)
 {
 	int			i;
-	int			j;
-	char	**dup;
+	char		**dup;
 
-	/** duplicate the map **/
 	dup = malloc(sizeof(char *) * (get_height(map) + 1));
 	i = 0;
 	while (map[i])
@@ -181,14 +179,18 @@ int	path_check(char **map)
 		i++;
 	}
 	dup[i] = NULL;
+	return (dup);
+}
 
-	/** get player coordinates **/
+int	path_check(char **map)
+{
+	int			i;
+	int			j;
+	char	**dup;
+
+	dup = duplicate_map(map);
 	get_position('P', dup, &i, &j);
-
-	/** fill the map with DFS **/
 	flood_fill(dup, j, i);
-
-	/** check if the path is valid**/
 	i = 0;
 	while (dup[i])
 	{
@@ -196,8 +198,6 @@ int	path_check(char **map)
 			return (0);
 		i++;
 	}
-
-	/** free the duplicate map **/
 	i = 0;
 	while (dup[i])
 	{
