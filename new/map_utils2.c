@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../headers/so_long.h"
 
 int	get_height(char **map)
 {

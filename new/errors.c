@@ -10,7 +10,67 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../headers/so_long.h"
+
+void    free_map(char **map)
+{
+    int i;
+
+    i = 0;
+    if (!map)
+        return ;
+    while (map[i])
+        free(map[i++]);
+    free(map);
+    map = NULL;
+}
+
+void    free_image(t_img *img, void *mlx)
+{
+    if (img->img_ptr)
+        mlx_destroy_image(mlx, img->img_ptr);
+    // if (img->img_data)
+    //     free(img->img_data);
+    free(img);
+}
+
+void    free_sprite(t_img **sprite, void *mlx)
+{
+    int i;
+
+    i = 0;
+    if (!sprite)
+        return ;
+    while (sprite[i])
+    {
+        free_image(sprite[i], mlx);
+        i++;
+    }
+    free(sprite);
+}
+
+void    free_memory(t_game *game)
+{
+    free_map(game->map);
+    free_image(game->render_img, game->mlx);
+    free_image(game->wall, game->mlx);
+    free_image(game->floor, game->mlx);
+    free_sprite(game->player, game->mlx);
+    free_sprite(game->exit, game->mlx);
+    free_sprite(game->collectible, game->mlx);
+    free_sprite(game->enemy, game->mlx);
+    if (game->player_data)
+        free(game->player_data);
+    if (game->enemy_data)
+        free(game->enemy_data);
+    if (game->win)
+        mlx_destroy_window(game->mlx, game->win);
+    if (game->mlx)
+    {
+        mlx_destroy_display(game->mlx);
+        free(game->mlx);
+    }
+}
 
 void    map_errors(t_game *game)
 {
@@ -43,18 +103,21 @@ void    map_errors(t_game *game)
 int error_prompts(t_game *game)
 {
     if (game->error_code == 1)
-        return (ft_putstr_fd("Error\n--> [malloc error]\n", 1), 1);
+        ft_putstr_fd("Error\n--> [malloc error]\n", 1);
     else if (game->error_code > 1 && game->error_code < 11)
-        return (map_errors(game), 1);
+        map_errors(game);
     else if (game->error_code == 11)
-        return (ft_putstr_fd("Error\nMLX: --> [failed to init connection]\n", 1), 1);
+        ft_putstr_fd("Error\nMLX: --> [failed to init connection]\n", 1);
     else if (game->error_code == 12)
-        return (ft_putstr_fd("Error\nMLX: --> [failed to create new window]\n", 1), 1);
+        ft_putstr_fd("Error\nMLX: --> [failed to create new window]\n", 1);
     else if (game->error_code == 13)
-        return (ft_putstr_fd("Error\nMLX: --> [failed to create new image]\n", 1), 1);
+        ft_putstr_fd("Error\nMLX: --> [failed to create new image]\n", 1);
     else if (game->error_code == 14)
-        return (ft_putstr_fd("Error\nMLX: --> [failed to fetsh data from image]\n", 1), 1);
+        ft_putstr_fd("Error\nMLX: --> [failed to fetsh data from image]\n", 1);
     else if (game->error_code == 15)
-        return (ft_putstr_fd("Error\nMLX: --> [failed to read xpm file]\n", 1), 1);
+        ft_putstr_fd("Error\nMLX: --> [failed to read xpm file]\n", 1);
+    free_memory(game);
+    if (game->error_code != 0)
+        return (1);
     return (0);
 }

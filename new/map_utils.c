@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../headers/so_long.h"
 
 int	is_border(char *str)
 {

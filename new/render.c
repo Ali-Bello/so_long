@@ -6,11 +6,11 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 23:28:42 by aderraj           #+#    #+#             */
-/*   Updated: 2024/07/08 23:57:51 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/07/09 16:38:31 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../headers/so_long.h"
 
 int get_animation_idx(int direction)
 {
@@ -85,5 +85,26 @@ void    render_map(t_game *game)
 
 int render_game(t_game *game)
 {
-    
+    render_collectibles(game);
+    render_exit(game);
+    render_player(game);
+    render_enemy(game);
+    mlx_put_image_to_window(game->mlx, game->win,
+            game->render_img->img_ptr, 0, 0);
+    if (!game->collectibles_count && game->player_data->x == game->exit_x
+            && game->player_data->y == game->exit_y)
+    {
+        mlx_string_put(game->mlx, game->win, 10, 10, 0x00FFFFFF, "You won!");
+        error_prompts(game);
+        exit(0);
+    }
+    if (game->player_data->x == game->enemy_data->x
+            && game->player_data->y == game->enemy_data->y)
+    {
+        mlx_string_put(game->mlx, game->win, 10, 10, 0x00FFFFFF, "You lost!");  
+        error_prompts(game);
+        exit(0);
+    }
+    usleep(16670);
+	return (0);
 }

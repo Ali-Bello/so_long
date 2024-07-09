@@ -10,47 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
-
-void    set_available_space(t_game *game, char **arr, int *count)
-{
-    int i;
-    int j;
-
-    i = 0;
-    while (i < game->map_height)
-    {
-        j = 0;
-        while (j < game->map_width)
-        {
-            if (game->map[i][j] == '0')
-            {
-                arr[*count][0] = i;
-                arr[*count][1] = j;
-                (*count)++;
-            }
-            j++;
-        }
-        i++;
-    }
-    if (i <= 3)
-        *count = 0;
-}
-
-void    spawn_enemy(t_game *game)
-{
-    char    available_positions[game->map_height * game->map_width][2];
-    int     count;
-    int     tmp;
-
-    set_available_space(game, available_positions, &count);
-    if (count == 0)
-        return;
-    srand(time(NULL)); 
-    tmp = rand() % count;
-    game->map[(int)available_positions[tmp][0]]
-            [(int)available_positions[tmp][1]] = 'X';
-}
+#include "../headers/so_long.h"
 
 void    character_init(t_character *character, char c, char **map)
 {
@@ -66,11 +26,7 @@ void    character_init(t_character *character, char c, char **map)
 
 void    game_init(t_game *game, char *path)
 {
-    game->error_code = 0;
-    game->moves_count = 0;
-    game->collectibles_count = 0;
-    game->exit_x = 0;
-    game->exit_y = 0;
+    ft_memset(game, 0, sizeof(t_game));
     game_allocs(game);
     game->map = read_map(path, game);
     if (game->error_code)
@@ -79,13 +35,22 @@ void    game_init(t_game *game, char *path)
     game->map_height = get_height(game->map);
     game->mlx = mlx_init();
     if (!game->mlx)
+    {
+        game->error_code = 11;
+        return ;
+    }
+    load_assets(game);
+    if (game->error_code)
         return ;
     game->win = mlx_new_window(game->mlx, game->map_width * TILE_SIZE, 
                                 game->map_height * TILE_SIZE, "so_long");
     if (!game->win)
+    {
+        game->error_code = 12;
         return ;
-    load_assets(game);
+    }
     spawn_enemy(game);
     character_init(game->player_data, 'P', game->map);
     character_init(game->enemy_data, 'X', game->map);
+    get_position('E', game->map, &game->exit_y, &game->exit_x);
 }

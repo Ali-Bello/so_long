@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../headers/so_long.h"
 
 int	new_line_check(char *str)
 {
@@ -70,36 +70,37 @@ int	is_enclosed(char **map)
 	return (1);
 }
 
-int map_check(t_game *game)
+char	**map_check(t_game *game)
 {
 	if (!game->map)
-		return (game->error_code = 1);
+		game->error_code = 1;
 	if (!is_valid_chars(game->map, "01CEP"))
-		return (game->error_code = 4);
+		game->error_code = 4;
 	else if (!is_enclosed(game->map))
-		return (game->error_code = 5);
+		game->error_code = 5;
 	else if (!is_rectangular(game->map))
-		return (game->error_code = 6);
+		game->error_code = 6;
 	else if (!is_unique(game->map, 'E'))
-		return (game->error_code = 7);
+		game->error_code = 7;
 	else if (!is_unique(game->map, 'P'))
-		return (game->error_code = 8);
+		game->error_code = 8;
 	else if (!has_collectible(game->map))
-		return (game->error_code = 9);
+		game->error_code = 9;
 	else if (!path_check(game->map))
-		return (game->error_code = 10);
+		game->error_code = 10;
+	return (game->map);
 }
 
-int read_map(char *path, t_game *game)
+char **read_map(char *path, t_game *game)
 {
     int     fd;
     char    *buffer;
     char    *line;
 
     fd = open(path, O_RDONLY);
+	game->error_code = 2 * (fd < 0) + 0 * (fd >= 0);
     if (fd < 0)
-        return (game->error_code = 2);
-
+        return (NULL);
     buffer = NULL;
     while (1)
 	{
@@ -111,7 +112,8 @@ int read_map(char *path, t_game *game)
 			if (buffer)
 				free(buffer);
 			free(line);
-			return (game->error_code = 3);
+			game->error_code = 3;
+			return (NULL);
 		}
 		buffer = ft_strjoin(buffer, line);
 		free(line);
