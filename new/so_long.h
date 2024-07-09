@@ -23,6 +23,7 @@
 #include <time.h>
 
 #define TILE_SIZE 64
+#define STEP_SIZE 4
 
 typedef struct s_img
 {
@@ -42,6 +43,9 @@ typedef struct s_character
     int target_x;
     int target_y;
     int direction;
+    int animation_frame;
+    int animation_idx;
+    int step;
 }   t_character;
 
 
@@ -53,6 +57,10 @@ typedef struct s_game
     int     map_width;
     int     map_height;
     int     error_code;
+    int     moves_count;
+    int     collectibles_count;
+    int     exit_x;
+    int     exit_y;
     t_img   *render_img;
     t_img   *wall;
     t_img   *floor;
@@ -80,5 +88,6 @@ void    flood_fill(char **map, int x, int y);
 
 /**RENDER**/
 void    render_map(t_game *game);
+int     get_animation_idx(int direction);
 /*********/
 #endif

@@ -35,7 +35,6 @@ char	*ft_strjoin(char *s1, char *s2)
 	ft_memcpy(ptr, s1, len);
 	ft_memcpy(ptr + len, s2, len2);
 	free(s1);
-	free(s2);
 	ptr[len + len2] = 0;
 	return (ptr);
 }

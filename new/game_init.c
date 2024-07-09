@@ -60,11 +60,17 @@ void    character_init(t_character *character, char c, char **map)
     character->target_x = character->x;
     character->target_y = character->y;
     character->direction = 0;
+    character->animation_frame = 0;
+    character->animation_idx = 0;
 }
 
 void    game_init(t_game *game, char *path)
 {
     game->error_code = 0;
+    game->moves_count = 0;
+    game->collectibles_count = 0;
+    game->exit_x = 0;
+    game->exit_y = 0;
     game_allocs(game);
     game->map = read_map(path, game);
     if (game->error_code)
@@ -81,5 +87,5 @@ void    game_init(t_game *game, char *path)
     load_assets(game);
     spawn_enemy(game);
     character_init(game->player_data, 'P', game->map);
-    character_init(game->enemy_data, 'E', game->map);
+    character_init(game->enemy_data, 'X', game->map);
 }

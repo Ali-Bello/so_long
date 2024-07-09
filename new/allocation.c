@@ -12,31 +12,28 @@
 
 #include "so_long.h"
 
-int alloc_frames(t_img **ptr, int n, int *error_code)
+void    alloc_animation(t_img **ptr, int n, int *error_code)
 {
     int i;
 
-    i = 0;
-    while (i < n - 1)
-    {
-        ptr[i] = malloc(sizeof(t_img));
-        if (!ptr[i])
-            return (*error_code = 1);
-        i++;
-    }
-    ptr[i] = NULL;
-    return (0);
-}
-
-void    alloc_animation(t_img **ptr, int n, int *error_code)
-{
     ptr = malloc(sizeof(t_img *) * n);
     if (!ptr)
     {
         *error_code = 1;
         return ;
     }
-    alloc_frames(ptr, n, error_code);
+    i = 0;
+    while (i < n - 1)
+    {
+        ptr[i] = malloc(sizeof(t_img));
+        if (!ptr[i])
+        {
+            *error_code = 1;
+            return ;
+        }
+        i++;
+    }
+    ptr[i] = NULL;
 }
 
 int load_frames(t_game *game, t_img **ptr, int n, char *path)

@@ -12,6 +12,21 @@
 
 #include "so_long.h"
 
+int get_animation_idx(int direction)
+{
+    if (direction == 0)
+        return (0);
+    if (direction == 1)
+        return (6);
+    if (direction == 2)
+        return (12);
+    if (direction == 3)
+        return (18);
+    if (direction == 4)
+        return (24);
+    return (0);
+}
+
 void	ft_cpy_pixel(t_img *src, t_img *dst, int src_idx, int dst_idx)
 {
 	int	i;
