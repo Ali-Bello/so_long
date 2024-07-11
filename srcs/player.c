@@ -224,7 +224,6 @@ void move_enemy(t_game *game) {
 
 void render_enemy(t_game *game) {
     move_enemy(game);
-
     if (!game->enemy->current_animation->current_frame)
         game->enemy->current_animation->current_frame = game->enemy->current_animation->frames;
     if (game->enemy->current_animation->delay_counter < 5) {

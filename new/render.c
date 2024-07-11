@@ -95,22 +95,20 @@ int render_game(t_game *game)
 {
     render_collectibles(game);
     render_exit(game);
-    render_player(game);
     render_enemy(game);
+    render_player(game);
     mlx_put_image_to_window(game->mlx, game->win, game->render_img->img_ptr, 0, 0);
     if (!game->collectibles_count && game->player_data->x == game->exit_x
             && game->player_data->y == game->exit_y)
     {
         mlx_string_put(game->mlx, game->win, 10, 10, 0x00FFFFFF, "You won!");
         error_prompts(game);
-        exit(0);
     }
     if (game->player_data->x == game->enemy_data->x
             && game->player_data->y == game->enemy_data->y)
     {
-        mlx_string_put(game->mlx, game->win, 10, 10, 0x00FFFFFF, "You lost!");  
+        mlx_string_put(game->mlx, game->win, 150, 150, 0x011654, "You lost!");
         error_prompts(game);
-        exit(0);
     }
     usleep(50000);
 	return (0);

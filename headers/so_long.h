@@ -23,7 +23,7 @@
 #include <time.h>
 
 #define TILE_SIZE 64
-#define STEP_SIZE 4
+#define STEP_SIZE 8
 
 typedef struct s_img
 {
