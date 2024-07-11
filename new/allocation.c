@@ -47,7 +47,7 @@ int load_frames(t_game *game, t_img **ptr, int n, char *path)
     char    *tmp;
 
     i = 0;
-    while (i < n - 1)
+    while (i < n)
     {
         tmp = ft_strjoin(ft_itoa(i), ".xpm");
         frame_path = ft_strjoin(ft_strdup(path), tmp);
@@ -90,10 +90,10 @@ int load_assets(t_game *game)
     game->floor->img_data = mlx_get_data_addr(game->floor->img_ptr, &game->floor->bpp, &game->floor->line_len, &game->floor->endian);
     if (!game->floor->img_data)
         return (game->error_code = 14);
-    load_frames(game, game->player, 31, "assets/Player/");
-    load_frames(game, game->enemy, 21, "assets/enemy/");
-    load_frames(game, game->collectible, 9, "assets/Collectible/");
-    load_frames(game, game->exit, 12, "assets/Exit/");
+    load_frames(game, game->player, 30, "assets/Player/");
+    load_frames(game, game->enemy, 20, "assets/Enemy/");
+    load_frames(game, game->collectible, 8, "assets/Collectible/");
+    load_frames(game, game->exit, 11, "assets/Exit/");
     return (0);
 }
 

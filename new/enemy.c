@@ -59,6 +59,8 @@ void spawn_enemy(t_game *game)
 void    render_enemy(t_game *game)
 {
     game->enemy_data->animation_idx = get_animation_idx(game->enemy_data->direction, 4);
+    ft_cpy_img(game->floor, game->render_img, game->enemy_data->x + game->enemy_data->step,
+                game->enemy_data->y + game->enemy_data->step);
     ft_cpy_img(game->enemy[game->enemy_data->animation_idx +
             game->enemy_data->animation_frame], game->render_img,
             (game->enemy_data->x + game->enemy_data->step),

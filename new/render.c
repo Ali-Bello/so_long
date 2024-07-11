@@ -92,7 +92,6 @@ int render_game(t_game *game)
     render_player(game);
     render_enemy(game);
     mlx_put_image_to_window(game->mlx, game->win, game->render_img->img_ptr, 0, 0);
-    mlx_put_image_to_window(game->mlx, game->win, game->exit[0]->img_ptr, 0, 0);
     if (!game->collectibles_count && game->player_data->x == game->exit_x
             && game->player_data->y == game->exit_y)
     {
