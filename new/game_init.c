@@ -22,6 +22,7 @@ void    character_init(t_character *character, char c, char **map)
     character->direction = 0;
     character->animation_frame = 0;
     character->animation_idx = 0;
+    character->step = 0;
 }
 
 void    game_init(t_game *game, char *path)

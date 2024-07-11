@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 17:55:39 by aderraj           #+#    #+#             */
-/*   Updated: 2024/07/08 23:20:32 by aderraj          ###   ########.fr       */
+/*   Updated: 2024/07/10 17:42:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/libft.h"
+#include <stdio.h>
 
 static void	fill(char *s, long int n, int count)
 {

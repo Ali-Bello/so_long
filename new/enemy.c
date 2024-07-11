@@ -58,11 +58,11 @@ void spawn_enemy(t_game *game)
 
 void    render_enemy(t_game *game)
 {
-    game->enemy_data->animation_idx = get_animation_idx(game->enemy_data->direction);
+    game->enemy_data->animation_idx = get_animation_idx(game->enemy_data->direction, 4);
     ft_cpy_img(game->enemy[game->enemy_data->animation_idx +
             game->enemy_data->animation_frame], game->render_img,
-            (game->enemy_data->x + game->enemy_data->step) * TILE_SIZE,
-            (game->enemy_data->y + game->enemy_data->step)* TILE_SIZE);
+            (game->enemy_data->x + game->enemy_data->step),
+            (game->enemy_data->y + game->enemy_data->step));
     if (game->enemy_data->animation_frame == 5)
         game->enemy_data->animation_frame = 0;
     else
@@ -73,6 +73,6 @@ void    render_enemy(t_game *game)
         game->enemy_data->x = game->enemy_data->target_x;
         game->enemy_data->y = game->enemy_data->target_y;
     }
-    else
+    else if (game->enemy_data->direction != 0)
         game->enemy_data->step += STEP_SIZE;
 }

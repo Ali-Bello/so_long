@@ -12,18 +12,18 @@
 
 #include "../headers/so_long.h"
 
-int get_animation_idx(int direction)
+int get_animation_idx(int direction, int frames)
 {
     if (direction == 0)
         return (0);
     if (direction == 1)
-        return (6);
+        return (frames);
     if (direction == 2)
-        return (12);
+        return (frames * 2);
     if (direction == 3)
-        return (18);
+        return (frames * 3);
     if (direction == 4)
-        return (24);
+        return (frames * 4);
     return (0);
 }
 
@@ -68,15 +68,17 @@ void    render_map(t_game *game)
     int j;
 
     i = 0;
+
     while (game->map[i])
     {
         j = 0;
         while (game->map[i][j])
         {
+            ft_cpy_img(game->floor, game->render_img, j * TILE_SIZE, i * TILE_SIZE);
             if (game->map[i][j] == '1')
+            {
                 ft_cpy_img(game->wall, game->render_img, j * TILE_SIZE, i * TILE_SIZE);
-            else
-                ft_cpy_img(game->floor, game->render_img, j * TILE_SIZE, i * TILE_SIZE);
+            }
             j++;
         }
         i++;
@@ -89,8 +91,8 @@ int render_game(t_game *game)
     render_exit(game);
     render_player(game);
     render_enemy(game);
-    mlx_put_image_to_window(game->mlx, game->win,
-            game->render_img->img_ptr, 0, 0);
+    mlx_put_image_to_window(game->mlx, game->win, game->render_img->img_ptr, 0, 0);
+    mlx_put_image_to_window(game->mlx, game->win, game->exit[0]->img_ptr, 0, 0);
     if (!game->collectibles_count && game->player_data->x == game->exit_x
             && game->player_data->y == game->exit_y)
     {
@@ -105,6 +107,6 @@ int render_game(t_game *game)
         error_prompts(game);
         exit(0);
     }
-    usleep(16670);
+    usleep(166670);
 	return (0);
 }

@@ -117,7 +117,6 @@ int error_prompts(t_game *game)
     else if (game->error_code == 15)
         ft_putstr_fd("Error\nMLX: --> [failed to read xpm file]\n", 1);
     free_memory(game);
-    if (game->error_code != 0)
-        return (1);
+    exit(0);
     return (0);
 }

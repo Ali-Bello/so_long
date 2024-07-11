@@ -25,17 +25,15 @@ void  render_collectibles(t_game *game)
         while (j < game->map_width)
         {
             if (game->map[i][j] == 'C')
-            {
                 ft_cpy_img(game->collectible[frame], game->render_img, j * TILE_SIZE, i * TILE_SIZE);
-                if (frame == 3)
-                    frame = 0;
-                else
-                    frame++;
-            }
             j++;
         }
         i++;
     }
+    if (frame == 7)
+        frame = 0;
+    else
+        frame++;
 }
 
 void    render_exit(t_game *game)
@@ -46,7 +44,7 @@ void    render_exit(t_game *game)
     {
         ft_cpy_img(game->exit[frame], game->render_img,
             game->exit_x * TILE_SIZE,game->exit_y * TILE_SIZE);
-        if (frame == 11)
+        if (frame == 10)
             frame = 0;
         else
             frame++;
