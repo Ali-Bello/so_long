@@ -52,7 +52,7 @@ int main(int ac, char **av)
         return (error_prompts(&game));
     render_map(&game);
     mlx_hook(game.win, 2, 1L << 0, key_down, &game);
-    mlx_hook(game.win, 3, 1L << 1, key_up, &game);
+    // mlx_hook(game.win, 3, 1L << 1, key_up, &game);
     mlx_loop_hook(game.mlx, render_game, &game);
     mlx_loop(game.mlx);
     return (0);

@@ -91,9 +91,9 @@ int load_assets(t_game *game)
     if (!game->floor->img_data)
         return (game->error_code = 14);
     load_frames(game, game->player, 30, "assets/Player/");
-    load_frames(game, game->enemy, 20, "assets/Enemy/");
+    load_frames(game, game->enemy, 30, "assets/Enemy/");
     load_frames(game, game->collectible, 8, "assets/Collectible/");
-    load_frames(game, game->exit, 11, "assets/Exit/");
+    load_frames(game, game->exit, 9, "assets/Exit/");
     return (0);
 }
 
@@ -120,8 +120,8 @@ int game_allocs(t_game *game)
     if (game->error_code)
         return (game->error_code);
     game->player = alloc_animation(31, &game->error_code);
-    game->enemy = alloc_animation(21, &game->error_code);
-    game->exit = alloc_animation(12, &game->error_code);
+    game->enemy = alloc_animation(31, &game->error_code);
+    game->exit = alloc_animation(10, &game->error_code);
     game->collectible = alloc_animation(9, &game->error_code);
     if (game->error_code)
         return (game->error_code);
@@ -129,6 +129,7 @@ int game_allocs(t_game *game)
     if (!game->player_data)
         return (game->error_code = 1);
     game->enemy_data = malloc(sizeof(t_character));
-    
+      if (!game->enemy_data)
+        return (game->error_code = 1);
     return (0);
 }

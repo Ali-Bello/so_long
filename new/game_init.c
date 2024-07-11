@@ -12,6 +12,28 @@
 
 #include "../headers/so_long.h"
 
+int get_collectibles_count(char **map)
+{
+    int i;
+    int j;
+    int count;
+
+    i = 0;
+    count = 0;
+    while (map[i])
+    {
+        j = 0;
+        while (map[i][j])
+        {
+            if (map[i][j] == 'C')
+                count++;
+            j++;
+        }
+        i++;
+    }
+    return (count);
+}
+
 void    character_init(t_character *character, char c, char **map)
 {
     get_position(c, map, &character->y, &character->x);
@@ -50,6 +72,7 @@ void    game_init(t_game *game, char *path)
         game->error_code = 12;
         return ;
     }
+    game->collectibles_count = get_collectibles_count(game->map);
     spawn_enemy(game);
     character_init(game->player_data, 'P', game->map);
     character_init(game->enemy_data, 'X', game->map);

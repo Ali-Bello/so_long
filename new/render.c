@@ -68,7 +68,6 @@ void    render_map(t_game *game)
     int j;
 
     i = 0;
-
     while (game->map[i])
     {
         j = 0;
@@ -77,6 +76,13 @@ void    render_map(t_game *game)
             ft_cpy_img(game->floor, game->render_img, j * TILE_SIZE, i * TILE_SIZE);
             if (game->map[i][j] == '1')
             {
+                if (i > 0 && i <= game->map_height - 1 && game->map[i - 1][j] == '1')
+                {
+                    ft_cpy_img(game->wall, game->render_img, j * TILE_SIZE, (i * TILE_SIZE) - 42);
+                    ft_cpy_img(game->wall, game->render_img, j * TILE_SIZE, (i * TILE_SIZE) - 21);
+                }
+                if (j > 0 && j <= game->map_width - 1 && game->map[i][j - 1] == '1')
+                    ft_cpy_img(game->wall, game->render_img, (j * TILE_SIZE) - 32, i * TILE_SIZE);
                 ft_cpy_img(game->wall, game->render_img, j * TILE_SIZE, i * TILE_SIZE);
             }
             j++;
@@ -106,6 +112,6 @@ int render_game(t_game *game)
         error_prompts(game);
         exit(0);
     }
-    usleep(166670);
+    usleep(50000);
 	return (0);
 }

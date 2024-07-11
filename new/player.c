@@ -37,6 +37,7 @@ int move_player(t_game *game, int new_x, int new_y)
 
 void render_player(t_game *game)
 {
+    ft_cpy_img(game->floor, game->render_img, game->player_data->x, game->player_data->y);
     game->player_data->animation_idx = get_animation_idx(game->player_data->direction, 6);
     ft_cpy_img(game->player[game->player_data->animation_idx +
             game->player_data->animation_frame], game->render_img,
