@@ -119,5 +119,6 @@ char **read_map(char *path, t_game *game)
 		free(line);
 	}
 	game->map = ft_split(buffer, '\n');
-    return (map_check(game));
+	free(buffer);
+	return (map_check(game));
 }

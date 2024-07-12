@@ -29,8 +29,6 @@ void    free_image(t_img *img, void *mlx)
 {
     if (img->img_ptr)
         mlx_destroy_image(mlx, img->img_ptr);
-    // if (img->img_data)
-    //     free(img->img_data);
     free(img);
 }
 
@@ -74,12 +72,6 @@ void    free_memory(t_game *game)
 
 void    map_errors(t_game *game)
 {
-    int i;
-
-    i = 0;
-    while (game-> map && game->map[i])
-        free(game->map[i++]);
-    free(game->map);
     if (game->error_code == 2)
         ft_putstr_fd("Error\nMAP FILE : --> [file couldn't be read]\n", 1);
     else if (game->error_code == 3)

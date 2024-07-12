@@ -6,12 +6,11 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 00:16:06 by aderraj           #+#    #+#             */
-/*   Updated: 2024/07/04 13:05:16 by aderraj          ###   ########.fr       */
+/*   Updated: 2023/11/18 00:42:41 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/libft.h"
-#include <stdio.h>
 
 static size_t	count(const char *s, char c)
 {
@@ -27,7 +26,7 @@ static size_t	count(const char *s, char c)
 			i++;
 		flag = i;
 		while (s[i] && s[i] != c)
-			i++;
+		i++;
 		if (i > flag)
 			count++;
 	}
@@ -69,7 +68,6 @@ static char	**fill(char **ptr, const char *s, char c)
 		}
 	}
 	ptr[j] = NULL;
-	free((void *)s);
 	return (ptr);
 }
 
