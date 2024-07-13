@@ -12,7 +12,26 @@
 
 #include "../headers/so_long.h"
 
-void  render_collectibles(t_game *game)
+void    render_free_space(t_game *game)
+{
+    int i;
+    int j;
+
+    i = 0;
+    while (game->map[i])
+    {
+        j = 0;
+        while (game->map[i][j])
+        {
+            if (game->map[i][j] == '0')
+                ft_cpy_img(game->floor, game->render_img, j * TILE_SIZE, i * TILE_SIZE);
+            j++;
+        }
+        i++;
+    }
+}
+
+void    render_collectibles(t_game *game)
 {
     static int frame;
     int i;

@@ -67,33 +67,12 @@ void update_player(t_game *game)
     }
 }
 
-void    render_background(t_game *game)
-{
-	int	x;
-	int	y;
-
-	x = game->player_data->x / TILE_SIZE;
-	y = game->player_data->y / TILE_SIZE;
-	for (int i = -1; i < 2; i++)
-	{
-		for (int j = -1; j < 2; j++)
-		{
-			if (game->map[y + i][x + j] == '1')
-				ft_cpy_img(game->wall, game->render_img, (x + j) * TILE_SIZE, (y + i) * TILE_SIZE);
-			else if (game->map[y + i][x + j] != 'E')
-				ft_cpy_img(game->floor, game->render_img, (x + j) * TILE_SIZE, (y + i) * TILE_SIZE);
-		}
-	}
-}
 void    render_player(t_game *game)
 {
-    // render_background(game);
     game->player_data->animation_idx = get_animation_idx(game->player_data->direction, 6);
     ft_cpy_img(game->player[game->player_data->animation_idx + game->player_data->animation_frame],
         game->render_img, game->player_data->x, game->player_data->y);
-
     update_player(game);
-
     if (game->player_data->animation_frame == 5)
         game->player_data->animation_frame = 0;
     else

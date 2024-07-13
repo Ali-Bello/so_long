@@ -101,6 +101,7 @@ void    render_enemy(t_game *game);
 void    render_collectibles(t_game *game);
 void    render_exit(t_game *game);
 int     render_game(t_game *game);
+void    render_free_space(t_game *game);
 int     get_animation_idx(int direction, int frames);
 /*********/
 #endif
