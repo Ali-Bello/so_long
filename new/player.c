@@ -26,8 +26,8 @@ int move_player(t_game *game, int new_x, int new_y)
         game->player_data->direction = 3;
     else if (new_y * TILE_SIZE < game->player_data->y)
         game->player_data->direction = 4;
-    game->map[new_y][new_x] = 'P';
-    game->map[game->player_data->y / TILE_SIZE][game->player_data->x / TILE_SIZE] = '0';
+    game->player_data->prev_x = game->player_data->x / TILE_SIZE;
+    game->player_data->prev_y = game->player_data->y / TILE_SIZE;
     game->player_data->target_x = new_x * TILE_SIZE;
     game->player_data->target_y = new_y * TILE_SIZE;
     game->moves_count++;
@@ -37,35 +37,26 @@ int move_player(t_game *game, int new_x, int new_y)
 
 void update_player(t_game *game)
 {
-    if (game->player_data->direction == 1)
+    printf("player_dir: %d\n", game->player_data->direction);
+    if (game->player_data->x < game->player_data->target_x)
+        game->player_data->x += STEP_SIZE;
+    if (game->player_data->x > game->player_data->target_x)
+        game->player_data->x -= STEP_SIZE;
+    if (game->player_data->y < game->player_data->target_y)
+        game->player_data->y += STEP_SIZE;
+    if (game->player_data->y > game->player_data->target_y)
+        game->player_data->y -= STEP_SIZE;
+    printf("player_x: %d, player_y: %d\n", game->player_data->x, game->player_data->y);
+    printf("player_target_x: %d, player_target_y: %d\n", game->player_data->target_x, game->player_data->target_y);
+    if (game->player_data->x == game->player_data->target_x
+        && game->player_data->y == game->player_data->target_y)
     {
-        if (game->player_data->x < game->player_data->target_x)
-            game->player_data->x += STEP_SIZE;
-        else
-            game->player_data->direction = 0;
-    }
-    else if (game->player_data->direction == 2)
-    {
-        if (game->player_data->x > game->player_data->target_x)
-            game->player_data->x -= STEP_SIZE;
-        else
-            game->player_data->direction = 0;
-    }
-    else if (game->player_data->direction == 3)
-    {
-        if (game->player_data->y < game->player_data->target_y)
-            game->player_data->y += STEP_SIZE;
-        else
-            game->player_data->direction = 0;
-    }
-    else if (game->player_data->direction == 4)
-    {
-        if (game->player_data->y > game->player_data->target_y)
-            game->player_data->y -= STEP_SIZE;
-        else
-            game->player_data->direction = 0;
+        game->map[game->player_data->prev_y][game->player_data->prev_x] = '0';
+        game->map[game->player_data->y / TILE_SIZE][game->player_data->x / TILE_SIZE] = 'P';
+        game->player_data->direction = 0;
     }
 }
+
 
 void    render_player(t_game *game)
 {

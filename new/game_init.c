@@ -37,6 +37,8 @@ int get_collectibles_count(char **map)
 void    character_init(t_character *character, char c, char **map)
 {
     get_position(c, map, &character->y, &character->x);
+    character->prev_x = character->x;
+    character->prev_y = character->y;
     character->x *= TILE_SIZE;
     character->y *= TILE_SIZE;
     character->target_x = character->x;

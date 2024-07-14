@@ -38,6 +38,8 @@ typedef struct s_img
 
 typedef struct s_character
 {
+    int prev_x;
+    int prev_y;
     int x;
     int y;
     int target_x;
