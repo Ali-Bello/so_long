@@ -93,7 +93,9 @@ void    render_map(t_game *game)
 
 int render_game(t_game *game)
 {
-//    render_map(game);
+    printf("collectibles_count: %d\n", game->collectibles_count);
+    mlx_clear_window(game->mlx, game->win);
+    render_map(game);
     render_collectibles(game);
     render_exit(game);
     render_enemy(game);
@@ -111,6 +113,6 @@ int render_game(t_game *game)
         mlx_string_put(game->mlx, game->win, 150, 150, 0x011654, "You lost!");
         error_prompts(game);
     }
-    usleep(16670);
+    usleep(1000);
 	return (0);
 }

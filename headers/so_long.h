@@ -38,8 +38,6 @@ typedef struct s_img
 
 typedef struct s_character
 {
-    int prev_x;
-    int prev_y;
     int x;
     int y;
     int target_x;
@@ -81,6 +79,8 @@ void    spawn_enemy(t_game *game);
 void    game_init(t_game *game, char *path);
 void    set_available_space(t_game *game, char arr[][2], int *count);
 int move_player(t_game *game, int new_x, int new_y);
+void update_character(t_character *character, int step);
+
 /**PARSING**/
 char    **read_map(char *path, t_game *game);
 char	**duplicate_map(char **map);
