@@ -64,6 +64,7 @@ void	ft_cpy_img(t_img *src, t_img *dst, int x, int y)
 
 void    render_map(t_game *game)
 {
+    static int frame;
     int i;
     int j;
 
@@ -73,34 +74,29 @@ void    render_map(t_game *game)
         j = 0;
         while (game->map[i][j])
         {
-            ft_cpy_img(game->floor, game->render_img, j * TILE_SIZE, i * TILE_SIZE);
-            if (game->map[i][j] == '1')
-            {
-                if (i > 0 && i <= game->map_height - 1 && game->map[i - 1][j] == '1')
-                {
-                    ft_cpy_img(game->wall, game->render_img, j * TILE_SIZE, (i * TILE_SIZE) - 42);
-                    ft_cpy_img(game->wall, game->render_img, j * TILE_SIZE, (i * TILE_SIZE) - 21);
-                }
-                if (j > 0 && j <= game->map_width - 1 && game->map[i][j - 1] == '1')
-                    ft_cpy_img(game->wall, game->render_img, (j * TILE_SIZE) - 32, i * TILE_SIZE);
-                ft_cpy_img(game->wall, game->render_img, j * TILE_SIZE, i * TILE_SIZE);
-            }
+            if (game->map[i][j] != '1')
+                ft_cpy_img(game->floor, game->render_img, j * TILE_SIZE, i * TILE_SIZE);
+            if (game->map[i][j] == 'C')
+                ft_cpy_img(game->collectible[frame], game->render_img, j * TILE_SIZE, i * TILE_SIZE);
             j++;
         }
         i++;
     }
+    if (frame == 7)
+        frame = 0;
+    else
+        frame++;
 }
 
 int render_game(t_game *game)
 {
-    printf("collectibles_count: %d\n", game->collectibles_count);
     mlx_clear_window(game->mlx, game->win);
     render_map(game);
-    render_collectibles(game);
     render_exit(game);
     render_enemy(game);
     render_player(game);
     mlx_put_image_to_window(game->mlx, game->win, game->render_img->img_ptr, 0, 0);
+    render_counter(game);
     if (!game->collectibles_count && game->player_data->x == game->exit_x * TILE_SIZE
             && game->player_data->y  == game->exit_y * TILE_SIZE)
     {
@@ -113,6 +109,6 @@ int render_game(t_game *game)
         mlx_string_put(game->mlx, game->win, 150, 150, 0x011654, "You lost!");
         error_prompts(game);
     }
-    usleep(1000);
+    usleep(16670);
 	return (0);
 }

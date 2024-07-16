@@ -49,7 +49,10 @@ void spawn_enemy(t_game *game)
     count = 0;
     set_available_space(game, available_positions, &count);
     if (count == 0)
+    {
+        game->enemy_flag = -1;
         return ;
+    }
     srand(time(NULL)); 
     i = rand() % count;
     game->map[(int)available_positions[i][0]]
@@ -61,6 +64,8 @@ void    render_enemy(t_game *game)
 {
     static int delay;
 
+    if (game->enemy_flag == -1)
+        return ;
     game->enemy_data->animation_idx = get_animation_idx(game->enemy_data->direction, 6);
     ft_cpy_img(game->enemy[game->enemy_data->animation_idx +
             game->enemy_data->animation_frame], game->render_img,
@@ -73,5 +78,9 @@ void    render_enemy(t_game *game)
         else
             game->enemy_data->animation_frame++;
     }
+    game->enemy_data->target_x = game->player_data->x;
+    game->enemy_data->target_y = game->player_data->y;
+    if (game->enemy_flag == 0)
+        return ;
     update_character(game->enemy_data, STEP_SIZE / 2);
 }

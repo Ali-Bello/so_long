@@ -61,6 +61,7 @@ typedef struct s_game
     int     collectibles_count;
     int     exit_x;
     int     exit_y;
+    int     enemy_flag;
     t_img   *render_img;
     t_img   *wall;
     t_img   *floor;
@@ -72,15 +73,15 @@ typedef struct s_game
     t_character    *enemy_data;
 }   t_game;
 
-int game_allocs(t_game *game);
-int error_prompts(t_game *game);
-int load_assets(t_game *game);
+int     game_allocs(t_game *game);
+int     error_prompts(t_game *game);
+int     load_assets(t_game *game);
 void    spawn_enemy(t_game *game);
 void    game_init(t_game *game, char *path);
 void    set_available_space(t_game *game, char arr[][2], int *count);
-int move_player(t_game *game, int new_x, int new_y);
-void update_character(t_character *character, int step);
-
+int     move_player(t_game *game, int new_x, int new_y);
+void    update_character(t_character *character, int step);
+void    free_map(char **map);
 /**PARSING**/
 char    **read_map(char *path, t_game *game);
 char	**duplicate_map(char **map);
@@ -93,15 +94,17 @@ int     has_collectible(char **map);
 int     path_check(char **map);
 void	get_position(char c, char **map, int *y, int *x);
 void    flood_fill(char **map, int x, int y);
+int     open_file(char *name, int *error_code);
 /**********/
 
 /**RENDER**/
 void	ft_cpy_img(t_img *src, t_img *dst, int x, int y);
 void    render_map(t_game *game);
+void    render_walls(t_game *game);
 void    render_player(t_game *game);
 void    render_enemy(t_game *game);
-void    render_collectibles(t_game *game);
 void    render_exit(t_game *game);
+void    render_counter(t_game *game);
 int     render_game(t_game *game);
 void    render_free_space(t_game *game);
 int     get_animation_idx(int direction, int frames);

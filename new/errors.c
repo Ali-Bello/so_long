@@ -73,7 +73,7 @@ void    free_memory(t_game *game)
 void    map_errors(t_game *game)
 {
     if (game->error_code == 2)
-        ft_putstr_fd("Error\nMAP FILE : --> [file couldn't be read]\n", 1);
+        ft_putstr_fd("Error\nMAP FILE : --> [file doesn't exist or couldn't be read]\n", 1);
     else if (game->error_code == 3)
         ft_putstr_fd("Error\nMAP FILE : --> [contains extra line break(s)]\n", 1);
     else if (game->error_code == 4)
@@ -83,9 +83,9 @@ void    map_errors(t_game *game)
     else if (game->error_code == 6)
         ft_putstr_fd("Error\nMAP FILE : --> [is not rectangular]\n", 1);
     else if (game->error_code == 7)
-        ft_putstr_fd("Error\nMAP FILE : --> [contains more than 1 exit character]\n", 1);
+        ft_putstr_fd("Error\nMAP FILE : --> [doesn't contain 1 unique exit character]\n", 1);
     else if (game->error_code == 8)
-        ft_putstr_fd("Error\nMAP FILE : --> [contains more than 1 player character]\n", 1);
+        ft_putstr_fd("Error\nMAP FILE : --> [doesn't contain 1 unique player character]\n", 1);
     else if (game->error_code == 9)
         ft_putstr_fd("Error\nMAP FILE : --> [doesn't contain any collectible]\n", 1);
     else if (game->error_code == 10)
@@ -94,9 +94,14 @@ void    map_errors(t_game *game)
 
 int error_prompts(t_game *game)
 {
-    if (game->error_code == 1)
+    if (game->error_code == -2)
+        ft_putstr_fd("Error\nMAP FILE : --> [map is too BIG]\n", 1);
+
+    if (game->error_code == -1)
+        ft_putstr_fd("Error\nMAP FILE : --> [Filename should end with .ber]\n", 1);
+    else if (game->error_code == 1)
         ft_putstr_fd("Error\n--> [malloc error]\n", 1);
-    else if (game->error_code > 1 && game->error_code < 11)
+    else if (game->error_code > 1 && game->error_code < 12)
         map_errors(game);
     else if (game->error_code == 11)
         ft_putstr_fd("Error\nMLX: --> [failed to init connection]\n", 1);

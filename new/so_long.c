@@ -36,11 +36,11 @@ int main(int ac, char **av)
     t_game  game;
 
     if (ac != 2)
-        return (0);
+        return (ft_putstr_fd("Error\nARGUMENTS : --> [arguments are different than 2]\n", 1), 0);
     game_init(&game, av[1]);
     if (game.error_code != 0)
         return (error_prompts(&game));
-    // render_map(&game);
+    render_walls(&game);
     mlx_key_hook(game.win, key_down, &game);
     mlx_loop_hook(game.mlx, render_game, &game);
     mlx_loop(game.mlx);

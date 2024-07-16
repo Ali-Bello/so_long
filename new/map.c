@@ -97,8 +97,7 @@ char **read_map(char *path, t_game *game)
     char    *buffer;
     char    *line;
 
-    fd = open(path, O_RDONLY);
-	game->error_code = 2 * (fd < 0) + 0 * (fd >= 0);
+    fd = open_file(path, &game->error_code);
     if (fd < 0)
         return (NULL);
     buffer = NULL;

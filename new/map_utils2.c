@@ -12,6 +12,21 @@
 
 #include "../headers/so_long.h"
 
+int	open_file(char *name, int *error_code)
+{
+	int	fd;
+
+	if (ft_strncmp(name + ft_strlen(name) - 4, ".ber", 4))
+	{
+		*error_code = -1;
+		return (-1);
+	}
+	fd = open(name, O_RDONLY);
+	if (fd == -1)
+		*error_code = 2;
+	return (fd);
+}
+
 int	get_height(char **map)
 {
 	int	i;

@@ -64,6 +64,8 @@ int	is_unique(char **map, char c)
 		}
 		i++;
 	}
+	if (!flag)
+		return (0);
 	return (1);
 }
 
@@ -100,15 +102,9 @@ int	path_check(char **map)
 	while (dup[i])
 	{
 		if (!is_valid_chars(dup, "01"))
-			return (0);
+			return (free_map(dup), 0);
 		i++;
 	}
-	i = 0;
-	while (dup[i])
-	{
-		free(dup[i]);
-		i++;
-	}
-	free(dup);
+	free_map(dup);
 	return (1);
 }

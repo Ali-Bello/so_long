@@ -31,6 +31,8 @@ int move_player(t_game *game, int new_x, int new_y)
     game->player_data->target_x = new_x * TILE_SIZE;
     game->player_data->target_y = new_y * TILE_SIZE;
     game->moves_count++;
+    if (game->enemy_flag != -1)
+        game->enemy_flag = 1;
     return (1);
 }
 
@@ -51,6 +53,7 @@ void update_character(t_character *character, int step)
 
 void    render_player(t_game *game)
 {
+
     game->player_data->animation_idx = get_animation_idx(game->player_data->direction, 6);
     ft_cpy_img(game->player[game->player_data->animation_idx + game->player_data->animation_frame],
         game->render_img, game->player_data->x, game->player_data->y);

@@ -52,10 +52,15 @@ void    game_init(t_game *game, char *path)
     ft_memset(game, 0, sizeof(t_game));
     game_allocs(game);
     game->map = read_map(path, game);
-    if (game->error_code)
+    if (game->error_code || !game->map)
         return ;
     game->map_width = ft_strlen(game->map[0]);
     game->map_height = get_height(game->map);
+    if (game->map_width > 30 || game->map_height > 16)
+    {
+        game->error_code = -2;
+        return ;
+    }
     game->mlx = mlx_init();
     if (!game->mlx)
     {
