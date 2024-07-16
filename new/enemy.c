@@ -59,6 +59,17 @@ void spawn_enemy(t_game *game)
             [(int)available_positions[i][1]] = 'X';
 }
 
+void    move_enemy(t_game *game)
+{
+    if (game->map[game->enemy_data->y / TILE_SIZE + 1][game->enemy_data->x / TILE_SIZE] != '1')
+        game->enemy_data->target_y = game->enemy_data->y + TILE_SIZE;
+    else if (game->map[game->enemy_data->y / TILE_SIZE - 1][game->enemy_data->x / TILE_SIZE] != '1')
+        game->enemy_data->target_y = game->enemy_data->y - TILE_SIZE;
+    else if (game->map[game->enemy_data->y / TILE_SIZE][game->enemy_data->x / TILE_SIZE + 1] != '1')
+        game->enemy_data->target_x = game->enemy_data->x + TILE_SIZE; 
+    else if (game->map[game->enemy_data->y / TILE_SIZE][game->enemy_data->x / TILE_SIZE - 1] != '1')
+        game->enemy_data->target_x = game->enemy_data->x - TILE_SIZE; 
+}
 
 void    render_enemy(t_game *game)
 {
@@ -78,8 +89,7 @@ void    render_enemy(t_game *game)
         else
             game->enemy_data->animation_frame++;
     }
-    game->enemy_data->target_x = game->player_data->x;
-    game->enemy_data->target_y = game->player_data->y;
+    move_enemy(game);
     if (game->enemy_flag == 0)
         return ;
     update_character(game->enemy_data, STEP_SIZE / 2);

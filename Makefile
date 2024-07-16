@@ -1,8 +1,8 @@
 NAME = so_long
 
-CC = gcc
+CC = cc
 
-CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3
+CFLAGS = -Wall -Werror -Wextra -o3
 
 MLXFLAGS = -lXext -lX11 -lm mlx/libmlx_Linux.a
 

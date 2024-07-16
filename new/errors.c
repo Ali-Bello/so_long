@@ -89,7 +89,7 @@ void    map_errors(t_game *game)
     else if (game->error_code == 9)
         ft_putstr_fd("Error\nMAP FILE : --> [doesn't contain any collectible]\n", 1);
     else if (game->error_code == 10)
-        ft_putstr_fd("Error\nMAP FILE : --> [player can't reach exit]\n", 1);
+        ft_putstr_fd("Error\nMAP FILE : --> [player can't reach exit or coins]\n", 1);
 }
 
 int error_prompts(t_game *game)

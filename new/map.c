@@ -32,6 +32,8 @@ int	is_valid_chars(char **map, char *charset)
 	int	j;
 
 	i = 0;
+	if (!map)
+		return (0);
 	while (map[i])
 	{
 		j = 0;
