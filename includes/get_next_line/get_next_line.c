@@ -51,7 +51,7 @@ char	*line_extract(char **buffer)
 	if (!line)
 	{
 		free(*buffer);
-		return (NULL);
+		return (free(line), NULL);
 	}
 	tmp = ft_strdup(*buffer + i);
 	free(*buffer);

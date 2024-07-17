@@ -82,6 +82,7 @@ void    set_available_space(t_game *game, char arr[][2], int *count);
 int     move_player(t_game *game, int new_x, int new_y);
 void    update_character(t_character *character, int step);
 void    free_map(char **map);
+int	load_image(t_img *img, char *path, void *mlx, int *error_code);
 /**PARSING**/
 char    **read_map(char *path, t_game *game);
 char	**duplicate_map(char **map);
@@ -100,7 +101,7 @@ int     open_file(char *name, int *error_code);
 /**RENDER**/
 void	ft_cpy_img(t_img *src, t_img *dst, int x, int y);
 void    render_map(t_game *game);
-void    render_walls(t_game *game);
+void	render_wall(t_game *game, int i, int j);
 void    render_player(t_game *game);
 void    render_enemy(t_game *game);
 void    render_exit(t_game *game);

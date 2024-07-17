@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_utils.c                                    :+:      :+:    :+:   */
+/*   map_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 03:51:48 by marvin            #+#    #+#             */
-/*   Updated: 2024/07/08 03:51:48 by marvin           ###   ########.fr       */
+/*   Updated: 2024/07/17 01:38:30 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,8 @@ int	has_collectible(char **map)
 
 int	path_check(char **map)
 {
-	int			i;
-	int			j;
+	int		i;
+	int		j;
 	char	**dup;
 
 	dup = duplicate_map(map);

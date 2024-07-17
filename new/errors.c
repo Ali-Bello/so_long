@@ -3,117 +3,111 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 04:39:05 by marvin            #+#    #+#             */
-/*   Updated: 2024/07/08 04:39:05 by marvin           ###   ########.fr       */
+/*   Updated: 2024/07/17 02:47:55 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/so_long.h"
 
-void    free_map(char **map)
+void	free_image(t_img *img, void *mlx)
 {
-    int i;
-
-    i = 0;
-    if (!map)
-        return ;
-    while (map[i])
-        free(map[i++]);
-    free(map);
-    map = NULL;
+	if (img->img_ptr)
+		mlx_destroy_image(mlx, img->img_ptr);
+	free(img);
 }
 
-void    free_image(t_img *img, void *mlx)
+void	free_sprite(t_img **sprite, void *mlx)
 {
-    if (img->img_ptr)
-        mlx_destroy_image(mlx, img->img_ptr);
-    free(img);
+	int	i;
+
+	i = 0;
+	if (!sprite)
+		return ;
+	while (sprite[i])
+	{
+		free_image(sprite[i], mlx);
+		i++;
+	}
+	free(sprite);
 }
 
-void    free_sprite(t_img **sprite, void *mlx)
+void	free_memory(t_game *game)
 {
-    int i;
-
-    i = 0;
-    if (!sprite)
-        return ;
-    while (sprite[i])
-    {
-        free_image(sprite[i], mlx);
-        i++;
-    }
-    free(sprite);
+	free_map(game->map);
+	free_image(game->render_img, game->mlx);
+	free_image(game->wall, game->mlx);
+	free_image(game->floor, game->mlx);
+	free_sprite(game->player, game->mlx);
+	free_sprite(game->exit, game->mlx);
+	free_sprite(game->collectible, game->mlx);
+	free_sprite(game->enemy, game->mlx);
+	if (game->player_data)
+		free(game->player_data);
+	if (game->enemy_data)
+		free(game->enemy_data);
+	if (game->win)
+		mlx_destroy_window(game->mlx, game->win);
+	if (game->mlx)
+	{
+		mlx_destroy_display(game->mlx);
+		free(game->mlx);
+	}
 }
 
-void    free_memory(t_game *game)
+void	map_errors(t_game *game)
 {
-    free_map(game->map);
-    free_image(game->render_img, game->mlx);
-    free_image(game->wall, game->mlx);
-    free_image(game->floor, game->mlx);
-    free_sprite(game->player, game->mlx);
-    free_sprite(game->exit, game->mlx);
-    free_sprite(game->collectible, game->mlx);
-    free_sprite(game->enemy, game->mlx);
-    if (game->player_data)
-        free(game->player_data);
-    if (game->enemy_data)
-        free(game->enemy_data);
-    if (game->win)
-        mlx_destroy_window(game->mlx, game->win);
-    if (game->mlx)
-    {
-        mlx_destroy_display(game->mlx);
-        free(game->mlx);
-    }
+	if (game->error_code == 2)
+		ft_putstr_fd("Error\nMAP FILE : -->\
+		[file doesn't exist or couldn't be read]\n", 1);
+	else if (game->error_code == 3)
+		ft_putstr_fd("Error\nMAP FILE : -->\
+		[contains extra line break(s)]\n", 1);
+	else if (game->error_code == 4)
+		ft_putstr_fd("Error\nMAP FILE : -->\
+		[contains invalid character(s)]\n", 1);
+	else if (game->error_code == 5)
+		ft_putstr_fd("Error\nMAP FILE : --> [is not enclosed with walls]\n", 1);
+	else if (game->error_code == 6)
+		ft_putstr_fd("Error\nMAP FILE : --> [is not rectangular]\n", 1);
+	else if (game->error_code == 7)
+		ft_putstr_fd("Error\nMAP FILE : -->\
+		[doesn't contain 1 unique exit character]\n", 1);
+	else if (game->error_code == 8)
+		ft_putstr_fd("Error\nMAP FILE : -->\
+		[doesn't contain 1 unique player character]\n", 1);
+	else if (game->error_code == 9)
+		ft_putstr_fd("Error\nMAP FILE : -->\
+		[doesn't contain any collectible]\n", 1);
+	else if (game->error_code == 10)
+		ft_putstr_fd("Error\nMAP FILE : -->\
+		[player can't reach exit or coins]\n", 1);
 }
 
-void    map_errors(t_game *game)
+int	error_prompts(t_game *game)
 {
-    if (game->error_code == 2)
-        ft_putstr_fd("Error\nMAP FILE : --> [file doesn't exist or couldn't be read]\n", 1);
-    else if (game->error_code == 3)
-        ft_putstr_fd("Error\nMAP FILE : --> [contains extra line break(s)]\n", 1);
-    else if (game->error_code == 4)
-        ft_putstr_fd("Error\nMAP FILE : --> [contains invalid character(s)]\n", 1);
-    else if (game->error_code == 5)
-        ft_putstr_fd("Error\nMAP FILE : --> [is not enclosed with walls]\n", 1);
-    else if (game->error_code == 6)
-        ft_putstr_fd("Error\nMAP FILE : --> [is not rectangular]\n", 1);
-    else if (game->error_code == 7)
-        ft_putstr_fd("Error\nMAP FILE : --> [doesn't contain 1 unique exit character]\n", 1);
-    else if (game->error_code == 8)
-        ft_putstr_fd("Error\nMAP FILE : --> [doesn't contain 1 unique player character]\n", 1);
-    else if (game->error_code == 9)
-        ft_putstr_fd("Error\nMAP FILE : --> [doesn't contain any collectible]\n", 1);
-    else if (game->error_code == 10)
-        ft_putstr_fd("Error\nMAP FILE : --> [player can't reach exit or coins]\n", 1);
-}
-
-int error_prompts(t_game *game)
-{
-    if (game->error_code == -2)
-        ft_putstr_fd("Error\nMAP FILE : --> [map is too BIG]\n", 1);
-
-    if (game->error_code == -1)
-        ft_putstr_fd("Error\nMAP FILE : --> [Filename should end with .ber]\n", 1);
-    else if (game->error_code == 1)
-        ft_putstr_fd("Error\n--> [malloc error]\n", 1);
-    else if (game->error_code > 1 && game->error_code < 12)
-        map_errors(game);
-    else if (game->error_code == 11)
-        ft_putstr_fd("Error\nMLX: --> [failed to init connection]\n", 1);
-    else if (game->error_code == 12)
-        ft_putstr_fd("Error\nMLX: --> [failed to create new window]\n", 1);
-    else if (game->error_code == 13)
-        ft_putstr_fd("Error\nMLX: --> [failed to create new image]\n", 1);
-    else if (game->error_code == 14)
-        ft_putstr_fd("Error\nMLX: --> [failed to fetsh data from image]\n", 1);
-    else if (game->error_code == 15)
-        ft_putstr_fd("Error\nMLX: --> [failed to read xpm file]\n", 1);
-    free_memory(game);
-    exit(0);
-    return (0);
+	if (game->error_code == -2)
+		ft_putstr_fd("Error\nMAP FILE : --> [map is too BIG]\n", 1);
+	if (game->error_code == -1)
+		ft_putstr_fd("Error\nMAP FILE : --> [Filename should end with .ber]\n",
+			1);
+	else if (game->error_code == 1)
+		ft_putstr_fd("Error\n--> [malloc error]\n", 1);
+	else if (game->error_code > 1 && game->error_code < 12)
+		map_errors(game);
+	else if (game->error_code == 11)
+		ft_putstr_fd("Error\nMLX: --> [failed to init connection]\n", 1);
+	else if (game->error_code == 12)
+		ft_putstr_fd("Error\nMLX: --> [failed to create new window]\n", 1);
+	else if (game->error_code == 13)
+		ft_putstr_fd("Error\nMLX: --> [failed to create new image]\n", 1);
+	else if (game->error_code == 14)
+		ft_putstr_fd("Error\nMLX: --> [failed to fetsh data from image]\n", 1);
+	else if (game->error_code == 15)
+		ft_putstr_fd("Error\nMLX: --> [failed to read xpm file]\n", 1);
+	free_memory(game);
+	exit(0);
+	return (0);
 }

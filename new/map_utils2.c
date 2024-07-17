@@ -39,8 +39,8 @@ int	get_height(char **map)
 
 char	**duplicate_map(char **map)
 {
-	int			i;
-	char		**dup;
+	int		i;
+	char	**dup;
 
 	dup = malloc(sizeof(char *) * (get_height(map) + 1));
 	i = 0;
@@ -55,19 +55,19 @@ char	**duplicate_map(char **map)
 
 void	flood_fill(char **map, int x, int y)
 {
-  if (map[y][x] == '1')
-    return;
-  map[y][x] = '1';
-  flood_fill(map, x + 1, y);
-  flood_fill(map, x, y + 1);
-  flood_fill(map, x - 1, y);
-  flood_fill(map, x, y - 1);
+	if (map[y][x] == '1')
+		return ;
+	map[y][x] = '1';
+	flood_fill(map, x + 1, y);
+	flood_fill(map, x, y + 1);
+	flood_fill(map, x - 1, y);
+	flood_fill(map, x, y - 1);
 }
 
 void	get_position(char c, char **map, int *y, int *x)
 {
-	int			i;
-	int			j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (map[i])
@@ -76,11 +76,11 @@ void	get_position(char c, char **map, int *y, int *x)
 		while (map[i][j])
 		{
 			if (map[i][j] == c)
-				break;
+				break ;
 			j++;
 		}
 		if (map[i][j] == c)
-				break;
+			break ;
 		i++;
 	}
 	*y = i;

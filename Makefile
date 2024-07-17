@@ -2,7 +2,7 @@ NAME = so_long
 
 CC = cc
 
-CFLAGS = -Wall -Werror -Wextra -o3
+CFLAGS = -Wall -Werror -Wextra 
 
 MLXFLAGS = -lXext -lX11 -lm mlx/libmlx_Linux.a
 

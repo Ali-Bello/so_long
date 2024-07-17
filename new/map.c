@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 03:27:54 by marvin            #+#    #+#             */
-/*   Updated: 2024/07/08 03:27:54 by marvin           ###   ########.fr       */
+/*   Updated: 2024/07/17 02:19:02 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,25 +93,24 @@ char	**map_check(t_game *game)
 	return (game->map);
 }
 
-char **read_map(char *path, t_game *game)
+char	**read_map(char *path, t_game *game)
 {
-    int     fd;
-    char    *buffer;
-    char    *line;
+	int		fd;
+	char	*buffer;
+	char	*line;
 
-    fd = open_file(path, &game->error_code);
-    if (fd < 0)
-        return (NULL);
-    buffer = NULL;
-    while (1)
+	fd = open_file(path, &game->error_code);
+	if (fd < 0)
+		return (NULL);
+	buffer = NULL;
+	while (1)
 	{
 		line = get_next_line(fd);
 		if (!line)
 			break ;
 		if (!new_line_check(line))
 		{
-			if (buffer)
-				free(buffer);
+			free(buffer);
 			free(line);
 			game->error_code = 3;
 			return (NULL);
