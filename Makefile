@@ -6,9 +6,9 @@ CFLAGS = -Wall -Werror -Wextra
 
 MLXFLAGS = -lXext -lX11 -lm mlx/libmlx_Linux.a
 
-SRCS = new/allocation.c new/enemy.c new/render.c new/errors.c new/player.c\
-		new/game_init.c new/map.c new/map_utils.c new/map_utils2.c\
-		new/render_utils.c new/so_long.c
+SRCS = srcs/allocation.c srcs/enemy.c srcs/render.c srcs/errors.c srcs/player.c\
+		srcs/game_init.c srcs/map.c srcs/map_utils.c srcs/map_utils2.c\
+		srcs/render_utils.c srcs/so_long.c
 
 LIBFTPATH = includes/libft
 

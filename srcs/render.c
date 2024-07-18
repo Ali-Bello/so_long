@@ -5,12 +5,27 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/29 15:39:30 by aderraj           #+#    #+#             */
-/*   Updated: 2024/07/04 14:20:38 by aderraj          ###   ########.fr       */
+/*   Created: 2024/07/08 23:28:42 by aderraj           #+#    #+#             */
+/*   Updated: 2024/07/18 00:03:22 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/so_long.h"
+
+int	get_animation_idx(int direction, int frames)
+{
+	if (direction == 0)
+		return (0);
+	if (direction == 1)
+		return (frames);
+	if (direction == 2)
+		return (frames * 2);
+	if (direction == 3)
+		return (frames * 3);
+	if (direction == 4)
+		return (frames * 4);
+	return (0);
+}
 
 void	ft_cpy_pixel(t_img *src, t_img *dst, int src_idx, int dst_idx)
 {
@@ -47,49 +62,52 @@ void	ft_cpy_img(t_img *src, t_img *dst, int x, int y)
 	}
 }
 
-void	set_asset(t_game *game, char c, int x, int y)
+void	render_map(t_game *game)
 {
-	t_sprite	*tmp;
-
-	tmp = game->assests[0];
-	if (c == '1')
-		tmp = game->assests[1];
-	else
-		ft_cpy_img(game->assests[0]->animations->frames->img, game->bg, x, y);
-	if (c == 'C')
-		tmp = game->assests[2];
-	else if (c == 'E')
-		tmp = game->assests[3];
-	if (tmp)
-	{
-		ft_cpy_img(tmp->animations->current_frame->img, game->bg, x, y);
-		tmp->animations->current_frame = tmp->animations->current_frame->next;
-		if (!tmp->animations->current_frame)
-			tmp->animations->current_frame = tmp->animations->frames;
-	}
-}
-
-int	render_map(t_game *game)
-{
-	int	i;
-	int	j;
-	int	x;
-	int	y;
+	static int	frame;
+	int			i;
+	int			j;
 
 	i = 0;
-	y = 0;
 	while (game->map[i])
 	{
 		j = 0;
-		x = 0;
 		while (game->map[i][j])
 		{
-			set_asset(game, game->map[i][j], x, y);
-			x += IMG_WIDTH;
+			ft_cpy_img(game->floor, game->render_img, j * TILE_SIZE, i
+				* TILE_SIZE);
+			if (game->map[i][j] == '1')
+				render_wall(game, i, j);
+			if (game->map[i][j] == 'C')
+				ft_cpy_img(game->collectible[frame], game->render_img, j
+					* TILE_SIZE, i * TILE_SIZE);
 			j++;
 		}
-		y += IMG_HEIGHT;
 		i++;
 	}
+	if (frame == 7)
+		frame = 0;
+	else
+		frame++;
+}
+
+int	render_game(t_game *game)
+{
+	render_map(game);
+	render_exit(game);
+	render_enemy(game);
+	render_player(game);
+	mlx_put_image_to_window(game->mlx, game->win, game->render_img->img_ptr, 0,
+		0);
+	render_counter(game);
+	if (!game->collectibles_count && game->player_data->x == game->exit_x
+		* TILE_SIZE && game->player_data->y == game->exit_y * TILE_SIZE)
+		return (ft_putstr_fd("----> YOU HAVE WON !<----\n", 1),
+			error_prompts(game));
+	if (abs (game->player_data->x - game->enemy_data->x) < 20
+		&& abs(game->player_data->y - game->enemy_data->y) < 20)
+		return (ft_putstr_fd("----> YOU HAVE LOST !<----\n", 1),
+			error_prompts(game));
+	usleep(16670);
 	return (0);
 }
